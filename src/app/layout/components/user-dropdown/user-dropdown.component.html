@@ -1,0 +1,12 @@
+<div class="user-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
+  <span class="selected-user">{{ activeUser?.username }}</span>
+  <span class="dropdown-arrow">▼</span>
+
+  <ul *ngIf="isDropdownOpen" class="dropdown-menu">
+    <ng-container *ngFor="let user of users">
+      <li *ngIf="user.id !== activeUser?.id" (click)="setActiveUser(user)">
+        {{ user.username }}
+      </li>
+    </ng-container>
+  </ul>
+</div>
