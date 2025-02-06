@@ -1,0 +1,38 @@
+header {
+  background-color: forestgreen;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  color: white;
+  font-size: 24px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+
+  li {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
