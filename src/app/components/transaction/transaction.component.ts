@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {TransactionService} from '../../../services/transaction.service';
-import {CategoryService} from '../../../services/category.service';
+import {TransactionService} from '../../services/transaction.service';
+import {CategoryService} from '../../services/category.service';
 
 @Component({
   selector: 'app-transaction',
