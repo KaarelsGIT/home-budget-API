@@ -1,0 +1,72 @@
+<div class="container">
+  <h1 *ngIf="type === 'income'">Incomes</h1>
+  <h1 *ngIf="type === 'expense'">Expenses</h1>
+
+  <!-- 🔍 FILTERS FORM -->
+  <form (submit)="applyFilters()">
+    <label>
+      Date:
+      <input type="date" [(ngModel)]="filters.date" name="date">
+    </label>
+
+    <label>
+      Category:
+      <select [(ngModel)]="filters.categoryId" name="categoryId">
+        <option [value]="null">All</option>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+    </label>
+
+    <label>
+      Sort:
+      <select [(ngModel)]="filters.sortBy" name="sortBy">
+        <option value="date">Date</option>
+        <option value="amount">Amount</option>
+      </select>
+    </label>
+
+    <label>
+      Sort order:
+      <select [(ngModel)]="filters.sortOrder" name="sortOrder">
+        <option value="desc">Decreasing</option>
+        <option value="asc">Ascending</option>
+      </select>
+    </label>
+
+    <button type="submit">Filter</button>
+  </form>
+
+  <!-- 📊 TABLE -->
+  <table>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.category?.name }}</td>
+      <td>{{ transaction.amount }} €</td>
+      <td>{{ transaction.description }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 📌 PAGINATION -->
+  <div class="pagination">
+    <button (click)="changePage(-1)" [disabled]="filters.page === 0">Previous</button>
+    <span>Page {{ filters.page + 1 }}</span>
+    <button (click)="changePage(1)">Next</button>
+  </div>
+
+  <!-- 📊 SUMMARY -->
+  <div class="summary">
+    <h3>Summary:</h3>
+    <p>PageAmount: {{ pageTotal }} EUR</p>
+    <p>All Total (with filters): {{ allTotal }} EUR</p>
+  </div>
+</div>
