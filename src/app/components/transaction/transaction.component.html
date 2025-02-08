@@ -43,7 +43,7 @@
       <th>Date</th>
       <th>Category</th>
       <th>Amount</th>
-      <th>Description</th>
+      <th>Comments</th>
     </tr>
     </thead>
     <tbody>
@@ -58,7 +58,7 @@
 
   <!-- 📌 PAGINATION -->
   <div class="pagination">
-    <button (click)="changePage(-1)" [disabled]="filters.page === 0">Previous</button>
+    <button (click)="changePage(-1)" [disabled]="filters.page === 0">Back</button>
     <span>Page {{ filters.page + 1 }}</span>
     <button (click)="changePage(1)">Next</button>
   </div>

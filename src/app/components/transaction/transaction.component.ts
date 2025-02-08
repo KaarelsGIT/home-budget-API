@@ -18,7 +18,7 @@ export class TransactionComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
 
   transactions: any[] = [];
-  categories: any[] = []; // Kategooriate jaoks
+  categories: any[] = [];
   pageTotal: number = 0;
   allTotal: number = 0;
 
@@ -44,7 +44,7 @@ export class TransactionComponent implements OnInit {
   }
 
   fetchCategories(): void {
-    this.categoryService.getCategories().subscribe(categories => {
+    this.categoryService.getCategoriesByType(this.type).subscribe(categories => {
       this.categories = categories;
     });
   }
