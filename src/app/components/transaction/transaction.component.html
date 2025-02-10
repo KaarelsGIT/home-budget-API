@@ -10,6 +10,22 @@
     </label>
 
     <label>
+      Year:
+      <select [(ngModel)]="filters.year" name="year">
+        <option [value]="''">All</option>
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </label>
+
+    <label>
+      User:
+      <select [(ngModel)]="filters.userId" name="userId">
+        <option [value]="''">All</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+      </select>
+    </label>
+
+    <label>
       Category:
       <select [(ngModel)]="filters.categoryId" name="categoryId">
         <option [value]="''">All</option>
@@ -50,7 +66,7 @@
       </th>
       <th (click)="setSort('created')">
         Created
-      <span *ngIf="filters.sortBy === 'created'">
+        <span *ngIf="filters.sortBy === 'created'">
         {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
       </span>
       </th>

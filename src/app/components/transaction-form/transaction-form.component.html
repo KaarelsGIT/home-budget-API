@@ -1,0 +1,27 @@
+<div class="form-container">
+  <h2>Add {{ type | titlecase }}</h2>
+
+  <form (submit)="addTransaction()">
+    <label>
+      Amount (€):
+      <input type="number" [(ngModel)]="transaction.amount" name="amount" required>
+    </label>
+
+    <label>
+      Date:
+      <input type="date" [(ngModel)]="transaction.date" name="date" required>
+    </label>
+
+    <label>
+      Category:
+      <input type="text" [(ngModel)]="transaction.category" name="category">
+    </label>
+
+    <label>
+      Description:
+      <input type="text" [(ngModel)]="transaction.description" name="description">
+    </label>
+
+    <button type="submit">Add {{ type | titlecase }}</button>
+  </form>
+</div>

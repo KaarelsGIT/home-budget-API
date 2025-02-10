@@ -11,6 +11,9 @@ export class TransactionService {
 
   constructor(private http: HttpClient) {}
 
+  addTransaction(type: 'income' | 'expense', transaction: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/${type}s/add`, transaction);
+  }
 
   getTransactions(type: 'income' | 'expense', filters: any): Observable<any> {
     let params = new HttpParams();
@@ -26,5 +29,10 @@ export class TransactionService {
     const apiUrl = `${this.url}/${type}s/all`;
     return this.http.get<any>(apiUrl, { params });
   }
+
+  getYears(type: 'income' | 'expense'): Observable<any[]> {
+    return this.http.get<any>(`${this.url}/${type}s/years`);
+  }
+
 
 }

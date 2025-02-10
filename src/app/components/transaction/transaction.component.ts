@@ -3,6 +3,7 @@ import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
 import {CategoryService} from '../../services/category.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-transaction',
@@ -20,6 +21,8 @@ export class TransactionComponent implements OnInit {
 
   transactions: any[] = [];
   categories: any[] = [];
+  users: any[] = [];
+  years: any[] = [];
   pageTotal: number = 0;
   allTotal: number = 0;
 
@@ -36,11 +39,14 @@ export class TransactionComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.fetchCategories();
+    this.fetchUsers();
+    this.fetchYears();
     this.fetchTransactions();
   }
 
@@ -48,6 +54,18 @@ export class TransactionComponent implements OnInit {
     this.categoryService.getCategoriesByType(this.type).subscribe(categories => {
       this.categories = categories;
     });
+  }
+
+  fetchUsers(): void {
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+    })
+  }
+
+  fetchYears(): void {
+    this.transactionService.getYears(this.type).subscribe(years => {
+      this.years = years;
+    })
   }
 
   fetchTransactions(): void {
