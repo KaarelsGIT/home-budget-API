@@ -3,6 +3,7 @@ import {TransactionComponent} from "../../components/transaction/transaction.com
 
 @Component({
   selector: 'app-incomes',
+  standalone: true,
     imports: [
         TransactionComponent
     ],

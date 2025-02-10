@@ -1,6 +1,17 @@
 <div class="container">
-  <h1 *ngIf="type === 'income'">Incomes</h1>
-  <h1 *ngIf="type === 'expense'">Expenses</h1>
+  <div class="container-header">
+    <h1 *ngIf="type === 'income'">Incomes</h1>
+    <h1 *ngIf="type === 'expense'">Expenses</h1>
+
+    <!-- ADD BUTTON -->
+    <button class="add-button" *ngIf="!isFormVisible" (click)="toggleForm()">Add</button>
+    <button class="close-button" *ngIf="isFormVisible" (click)="toggleForm()">Close</button>
+  </div>
+
+  <!-- ADD FORM -->
+  <div *ngIf="isFormVisible">
+    <app-transaction-form [type]="type"></app-transaction-form>
+  </div>
 
   <!-- 🔍 FILTERS FORM -->
   <form (submit)="applyFilters()">

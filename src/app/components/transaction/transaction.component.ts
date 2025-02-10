@@ -1,23 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
 import {CategoryService} from '../../services/category.service';
 import {UserService} from '../../services/user.service';
+import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-transaction',
+  standalone: true,
   templateUrl: './transaction.component.html',
   imports: [
     NgForOf,
     FormsModule,
     NgIf,
-    DatePipe
+    DatePipe,
+    TitleCasePipe,
+    TransactionFormComponent
   ],
   styleUrls: ['./transaction.component.css']
 })
 export class TransactionComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
+  isFormVisible = false;
 
   transactions: any[] = [];
   categories: any[] = [];
@@ -36,6 +41,10 @@ export class TransactionComponent implements OnInit {
     page: 0,
     size: 20
   };
+
+  toggleForm(): void {
+    this.isFormVisible = !this.isFormVisible;
+  }
 
   constructor(
     private transactionService: TransactionService,
