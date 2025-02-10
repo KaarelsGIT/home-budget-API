@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
 import {CategoryService} from '../../services/category.service';
@@ -10,7 +10,8 @@ import {CategoryService} from '../../services/category.service';
   imports: [
     NgForOf,
     FormsModule,
-    NgIf
+    NgIf,
+    DatePipe
   ],
   styleUrls: ['./transaction.component.css']
 })
@@ -30,7 +31,7 @@ export class TransactionComponent implements OnInit {
     sortBy: 'date',
     sortOrder: 'desc',
     page: 0,
-    size: 10
+    size: 20
   };
 
   constructor(
@@ -59,6 +60,17 @@ export class TransactionComponent implements OnInit {
     }, error => {
       console.error('API error:', error);
     });
+  }
+
+  setSort(column: string): void {
+    if (this.filters.sortBy === column) {
+      this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.filters.sortBy = column;
+      this.filters.sortOrder = 'desc';
+    }
+
+    this.fetchTransactions();
   }
 
   applyFilters(): void {
