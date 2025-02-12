@@ -21,6 +21,7 @@ export class TransactionService {
     if (filters.categoryId) params = params.set('categoryId', filters.categoryId);
     if (filters.date) params = params.set('date', filters.date);
     if (filters.year) params = params.set('year', filters.year);
+    if (filters.month) params = params.set('month', filters.month);
     if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
     if (filters.sortOrder) params = params.set('sortOrder', filters.sortOrder);
     if (filters.page) params = params.set('page', filters.page);

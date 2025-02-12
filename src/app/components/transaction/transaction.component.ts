@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
 import {CategoryService} from '../../services/category.service';
 import {UserService} from '../../services/user.service';
+import {MONTHS} from '../month-list';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
 
 @Component({
@@ -15,7 +16,6 @@ import {TransactionFormComponent} from '../transaction-form/transaction-form.com
     FormsModule,
     NgIf,
     DatePipe,
-    TitleCasePipe,
     TransactionFormComponent
   ],
   styleUrls: ['./transaction.component.css']
@@ -23,6 +23,7 @@ import {TransactionFormComponent} from '../transaction-form/transaction-form.com
 export class TransactionComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
   isFormVisible = false;
+  months = MONTHS;
 
   transactions: any[] = [];
   categories: any[] = [];
@@ -36,6 +37,7 @@ export class TransactionComponent implements OnInit {
     categoryId: null,
     date: null,
     year: null,
+    month: null,
     sortBy: 'date',
     sortOrder: 'desc',
     page: 0,
@@ -57,6 +59,7 @@ export class TransactionComponent implements OnInit {
     this.fetchUsers();
     this.fetchYears();
     this.fetchTransactions();
+    this.fetchMonths();
   }
 
   fetchCategories(): void {
@@ -77,10 +80,24 @@ export class TransactionComponent implements OnInit {
     })
   }
 
+  fetchMonths(): void {
+    const params: any = {
+      month: this.months
+    }
+  }
+
   fetchTransactions(): void {
     if (!this.type) return;
 
-    this.transactionService.getTransactions(this.type, this.filters).subscribe(response => {
+    const params: any = { ...this.filters };
+    params.year = params.year ? Number(params.year) : null;
+    params.month = params.month ? Number(params.month) : null;
+    params.userId = params.userId ? Number(params.userId) : null;
+    params.categoryId = params.categoryId ? Number(params.categoryId) : null;
+
+    console.log('Sending filters:', params);
+
+    this.transactionService.getTransactions(this.type, params).subscribe(response => {
       this.transactions = response.transactionPage.content;
       this.pageTotal = response.pageTotal;
       this.allTotal = response.allTotal;
