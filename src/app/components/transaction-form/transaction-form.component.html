@@ -3,8 +3,13 @@
 
   <form (submit)="addTransaction()">
     <label>
+      User:
+      <app-user-dropdown></app-user-dropdown>
+    </label>
+
+    <label>
       Amount (€):
-      <input type="number" [(ngModel)]="transaction.amount" name="amount" required>
+
     </label>
 
     <label>
