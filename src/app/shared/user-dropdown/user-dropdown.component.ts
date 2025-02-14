@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {User} from '../../models/user';
 import {NgForOf, NgIf} from '@angular/common';
@@ -18,6 +18,8 @@ export class UserDropdownComponent implements OnInit {
   activeUser: User | null = null;
   isDropdownOpen = false;
 
+  @Output() selectedUser = new EventEmitter<User>();
+
   constructor(private userService: UserService) {
   }
 
@@ -25,14 +27,15 @@ export class UserDropdownComponent implements OnInit {
     this.userService.getUsers().subscribe((users) => {
       this.users = users;
       if (users.length > 0) {
-        this.activeUser = users[0]; // Vaikimisi esimene kasutaja
+        this.activeUser = users[0];
       }
     });
   }
 
   setActiveUser(user: User): void {
     this.activeUser = user;
-    this.isDropdownOpen = false; // Sulge dropdown peale valikut
+    this.selectedUser.emit(this.activeUser);
+    this.isDropdownOpen = false;
   }
 
   toggleDropdown(): void {

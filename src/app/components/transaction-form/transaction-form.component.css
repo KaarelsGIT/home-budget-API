@@ -67,4 +67,22 @@ form button:hover {
     font-size: 14px;
     padding: 8px 16px;
   }
+
+  .user-dropdown .user-dropdown {
+    color: black; /* Tee font nähtavaks */
+    font-size: 16px;
+  }
+
+  .user-dropdown.dropdown-menu {
+    background-color: #f8f9fa; /* Heledam taust */
+    color: black; /* Tekst mustaks */
+  }
+
+  .user-dropdown.dropdown-menu li {
+    color: black;
+  }
+
+  .user-dropdown.dropdown-menu li:hover {
+    background-color: #e9ecef;
+  }
 }

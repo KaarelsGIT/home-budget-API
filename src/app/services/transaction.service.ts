@@ -34,6 +34,4 @@ export class TransactionService {
   getYears(type: 'income' | 'expense'): Observable<any[]> {
     return this.http.get<any>(`${this.url}/${type}s/years`);
   }
-
-
 }

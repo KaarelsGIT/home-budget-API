@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
 import {CategoryService} from '../../services/category.service';
 import {UserService} from '../../services/user.service';
-import {MONTHS} from '../month-list';
+import {MONTHS} from './month-list';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
 
 @Component({
@@ -22,6 +22,7 @@ import {TransactionFormComponent} from '../transaction-form/transaction-form.com
 })
 export class TransactionComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
+
   isFormVisible = false;
   months = MONTHS;
 
@@ -43,10 +44,6 @@ export class TransactionComponent implements OnInit {
     page: 0,
     size: 20
   };
-
-  toggleForm(): void {
-    this.isFormVisible = !this.isFormVisible;
-  }
 
   constructor(
     private transactionService: TransactionService,
@@ -86,6 +83,26 @@ export class TransactionComponent implements OnInit {
     }
   }
 
+  toggleForm(): void {
+    this.isFormVisible = !this.isFormVisible;
+  }
+
+  applyFilters(): void {
+    this.filters.page = 0;
+    this.fetchTransactions();
+  }
+
+  setSort(column: string): void {
+    if (this.filters.sortBy === column) {
+      this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.filters.sortBy = column;
+      this.filters.sortOrder = 'desc';
+    }
+
+    this.fetchTransactions();
+  }
+
   fetchTransactions(): void {
     if (!this.type) return;
 
@@ -104,22 +121,6 @@ export class TransactionComponent implements OnInit {
     }, error => {
       console.error('API error:', error);
     });
-  }
-
-  setSort(column: string): void {
-    if (this.filters.sortBy === column) {
-      this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.filters.sortBy = column;
-      this.filters.sortOrder = 'desc';
-    }
-
-    this.fetchTransactions();
-  }
-
-  applyFilters(): void {
-    this.filters.page = 0;
-    this.fetchTransactions();
   }
 
   changePage(direction: number): void {

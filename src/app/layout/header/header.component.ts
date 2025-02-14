@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {UserDropdownComponent} from '../../components/user-dropdown/user-dropdown.component';
+import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
 
 @Component({
   selector: 'app-header',

@@ -2,14 +2,14 @@
   <h2>Add {{ type | titlecase }}</h2>
 
   <form (submit)="addTransaction()">
-    <label>
-      User:
-      <app-user-dropdown></app-user-dropdown>
-    </label>
+      <label>
+          User:
+          <app-user-dropdown (selectedUser)="transaction.user = $event"></app-user-dropdown>
+      </label>
 
     <label>
       Amount (€):
-
+        <input type="number" name="amount" required>
     </label>
 
     <label>
