@@ -9,7 +9,13 @@
       <li><a routerLink="/expenses">Expenses</a></li>
       <li><a routerLink="/settings">Settings</a></li>
       <li><a routerLink="/about">About</a></li>
-      <li><a><app-user-dropdown></app-user-dropdown></a></li>
+      <li>
+        <app-user-dropdown
+          [styleType]="'header'"
+          [selectedUser]="activeUser?.id ?? null"
+        (selectedUserChange)="onUserChange($event)">
+        </app-user-dropdown>
+      </li>
     </ul>
   </nav>
 </header>

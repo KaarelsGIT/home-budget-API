@@ -1,32 +1,30 @@
 <div class="form-container">
-  <h2>Add {{ type | titlecase }}</h2>
+    <h2>Add {{ type | titlecase }}</h2>
 
-  <form (submit)="addTransaction()">
-      <label>
-          User:
-          <app-user-dropdown (selectedUser)="transaction.user = $event"></app-user-dropdown>
-      </label>
+    <form (submit)="addTransaction()">
 
-    <label>
-      Amount (€):
-        <input type="number" name="amount" required>
-    </label>
+<!--        <app-user-dropdown [styleType]="'form'" (selectedUserChange)="onUserChange($event)"></app-user-dropdown>-->
 
-    <label>
-      Date:
-      <input type="date" [(ngModel)]="transaction.date" name="date" required>
-    </label>
+        <label>
+            Amount (€):
+            <input type="number" name="amount" required>
+        </label>
 
-    <label>
-      Category:
-      <input type="text" [(ngModel)]="transaction.category" name="category">
-    </label>
+        <label>
+            Date:
+            <input type="date" [(ngModel)]="transaction.date" name="date" required>
+        </label>
 
-    <label>
-      Description:
-      <input type="text" [(ngModel)]="transaction.description" name="description">
-    </label>
+        <label>
+            Category:
+            <input type="text" [(ngModel)]="transaction.category" name="category">
+        </label>
 
-    <button type="submit">Add {{ type | titlecase }}</button>
-  </form>
+        <label>
+            Description:
+            <input type="text" [(ngModel)]="transaction.description" name="description">
+        </label>
+
+        <button type="submit">Add {{ type | titlecase }}</button>
+    </form>
 </div>

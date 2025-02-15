@@ -1,12 +1,28 @@
-<div class="user-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
-  <span class="selected-user">{{ activeUser?.username }}</span>
+<!-- HEADER -->
+<div *ngIf="styleType === 'header'" class="user-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
+  <span class="selected-user">
+    {{ backendError ? 'No user' : (activeUser?.username || 'Select a user') }}
+  </span>
   <span class="dropdown-arrow">▼</span>
 
-  <ul *ngIf="isDropdownOpen" class="dropdown-menu">
+  <ul *ngIf="isDropdownOpen" class="dropdown-menu" (click)="$event.stopPropagation()"> <!-- Prevent click propagation -->
+    <li *ngIf="backendError" class="no-user">No user available</li> <!-- Show when backend fails -->
     <ng-container *ngFor="let user of users">
-      <li *ngIf="user.id !== activeUser?.id" (click)="setActiveUser(user)">
+      <li *ngIf="user.id !== activeUser?.id" (click)="setActiveUser(user)" [class.selected]="user.id === activeUser?.id">
         {{ user.username }}
       </li>
     </ng-container>
   </ul>
 </div>
+
+<!-- FORM -->
+<div *ngIf="styleType === 'form'">
+  <select id="userSelect" [ngModel]="activeUser?.id" (ngModelChange)="setActiveUserFromId($event)">
+    <option value="">All</option>
+    <option *ngFor="let user of users" [value]="user.id">
+      {{ user.username }}
+    </option>
+  </select>
+</div>
+
+

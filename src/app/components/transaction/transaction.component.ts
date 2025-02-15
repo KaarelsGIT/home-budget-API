@@ -6,6 +6,8 @@ import {CategoryService} from '../../services/category.service';
 import {UserService} from '../../services/user.service';
 import {MONTHS} from './month-list';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
+import {CategoryDropdownComponent} from '../../shared/category-dropdown/category-dropdown.component';
+import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
 
 @Component({
   selector: 'app-transaction',
@@ -16,7 +18,9 @@ import {TransactionFormComponent} from '../transaction-form/transaction-form.com
     FormsModule,
     NgIf,
     DatePipe,
-    TransactionFormComponent
+    TransactionFormComponent,
+    UserDropdownComponent,
+    CategoryDropdownComponent
   ],
   styleUrls: ['./transaction.component.css']
 })
@@ -34,8 +38,8 @@ export class TransactionComponent implements OnInit {
   allTotal: number = 0;
 
   filters = {
-    userId: null,
-    categoryId: null,
+    userId: null as string | number | null,
+    categoryId: null as string | number | null,
     date: null,
     year: null,
     month: null,
@@ -121,6 +125,14 @@ export class TransactionComponent implements OnInit {
     }, error => {
       console.error('API error:', error);
     });
+  }
+
+  onUserChange(userId: string | number | null) {
+    this.filters.userId = userId;
+  }
+
+  onCategoryChange(categoryId: number | string | null): void {
+    this.filters.categoryId = categoryId;
   }
 
   changePage(direction: number): void {

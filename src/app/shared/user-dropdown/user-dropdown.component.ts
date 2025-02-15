@@ -1,51 +1,75 @@
-import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
-import {UserService} from '../../services/user.service';
-import {User} from '../../models/user';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user';
 import {NgForOf, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-user-dropdown',
   standalone: true,
+  templateUrl: './user-dropdown.component.html',
+  styleUrls: ['./user-dropdown.component.css'],
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    FormsModule
   ],
-  templateUrl: './user-dropdown.component.html',
-  styleUrl: './user-dropdown.component.css'
 })
 export class UserDropdownComponent implements OnInit {
+  @Input() selectedUser: number | string | null = null;
+  @Input() styleType: 'header' | 'form' = 'form';
+  @Output() selectedUserChange = new EventEmitter<string | number | null>();
+
   users: User[] = [];
   activeUser: User | null = null;
   isDropdownOpen = false;
+  backendError = false;  // Vea lipu määramine
 
-  @Output() selectedUser = new EventEmitter<User>();
-
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((users) => {
-      this.users = users;
-      if (users.length > 0) {
-        this.activeUser = users[0];
-      }
-    });
+    this.fetchUsers();
+    this.loadSelectedUser();
   }
 
-  setActiveUser(user: User): void {
-    this.activeUser = user;
-    this.selectedUser.emit(this.activeUser);
-    this.isDropdownOpen = false;
+  fetchUsers(): void {
+    this.userService.getUsers().subscribe(
+      (users) => {
+        this.users = users;
+        this.backendError = false;
+        this.activeUser = this.users.find(u => u.id === this.selectedUser) || null;
+      },
+      () => {
+        this.backendError = true;
+        this.users = [];
+      }
+    );
+  }
+
+  loadSelectedUser(): void {
+    const storedUserId = localStorage.getItem('selectedUserId');
+    if (storedUserId) {
+      const user = this.users.find(u => u.id === +storedUserId);
+      if (user) {
+        this.activeUser = user;
+      }
+    }
   }
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  @HostListener('document:click', ['$event'])
-  closeDropdown(event: Event): void {
-    if (!(event.target as HTMLElement).closest('.user-dropdown')) {
-      this.isDropdownOpen = false;
-    }
+  setActiveUser(user: User): void {
+    this.activeUser = user;
+    this.selectedUserChange.emit(user.id);
+    localStorage.setItem('selectedUserId', user.id.toString());
+    this.isDropdownOpen = false;
+  }
+
+  setActiveUserFromId(userId: string | number): void {
+    const user = this.users.find(u => u.id == userId) || null;
+    this.activeUser = user;
+    this.selectedUserChange.emit(userId);
   }
 }

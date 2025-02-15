@@ -5,15 +5,13 @@ import {TitleCasePipe} from '@angular/common';
 import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
 import {UserService} from '../../services/user.service';
 import {User} from "../../models/user";
-import {Category} from "../../models/category";
 
 @Component({
     selector: 'app-transaction-form',
     standalone: true,
     imports: [
         FormsModule,
-        TitleCasePipe,
-        UserDropdownComponent
+        TitleCasePipe
     ],
     templateUrl: './transaction-form.component.html',
     styleUrl: './transaction-form.component.css'
@@ -22,9 +20,7 @@ export class TransactionFormComponent implements OnInit {
     @Input() type!: 'income' | 'expense';
     @Output() transactionAdded = new EventEmitter<void>();
 
-    users: User[] = [];
     activeUser: User | null = null;
-    categories: Category[] = [];
 
     transaction = {
         user: null as User | null,
@@ -39,20 +35,13 @@ export class TransactionFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.fetchUsers();
     }
 
-    fetchUsers(): void {
-        this.userService.getUsers().subscribe((users) => {
-            this.users = users;
-            console.log('Loaded users:', this.users);
-            if (users.length > 0) {
-                this.activeUser = users[0];
-            }
-        });
+    onUserChange(user: User): void {
+        this.activeUser = user;
+        this.transaction.user = user;
     }
 
-    fetchCategories(): void {}
 
     addTransaction(): void {
         if (!this.transaction.amount || !this.transaction.date) {
