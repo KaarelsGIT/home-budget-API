@@ -25,12 +25,10 @@
 
     <label>
       Month:
-      <select id="month" [(ngModel)]="filters.month" name="month">
-        <option [value]="''">All</option>
-        <option *ngFor="let month of months" [value]="month.value">
-          {{ month.name }}
-        </option>
-      </select>
+      <app-month-dropdown
+        [selectedMonth]="filters.month"
+        (selectedMonthChange)="onMonthChange($event)">
+      </app-month-dropdown>
     </label>
 
     <label>

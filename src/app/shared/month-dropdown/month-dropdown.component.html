@@ -1,0 +1,8 @@
+<div>
+  <select [ngModel]="selectedMonth" (ngModelChange)="selectedMonthChange.emit($event ? Number($event) : null)">
+    <option [value]="''">All</option>
+    <option *ngFor="let month of months" [value]="month.value">
+      {{ month.name }}
+    </option>
+  </select>
+</div>

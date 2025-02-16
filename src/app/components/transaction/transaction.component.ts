@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../services/transaction.service';
-import {CategoryService} from '../../services/category.service';
-import {UserService} from '../../services/user.service';
-import {MONTHS} from './month-list';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
 import {CategoryDropdownComponent} from '../../shared/category-dropdown/category-dropdown.component';
 import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
+import {MonthDropdownComponent} from '../../shared/month-dropdown/month-dropdown.component';
 
 @Component({
   selector: 'app-transaction',
@@ -20,7 +18,8 @@ import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.co
     DatePipe,
     TransactionFormComponent,
     UserDropdownComponent,
-    CategoryDropdownComponent
+    CategoryDropdownComponent,
+    MonthDropdownComponent
   ],
   styleUrls: ['./transaction.component.css']
 })
@@ -28,11 +27,8 @@ export class TransactionComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
 
   isFormVisible = false;
-  months = MONTHS;
 
   transactions: any[] = [];
-  categories: any[] = [];
-  users: any[] = [];
   years: any[] = [];
   pageTotal: number = 0;
   allTotal: number = 0;
@@ -40,51 +36,26 @@ export class TransactionComponent implements OnInit {
   filters = {
     userId: null as string | number | null,
     categoryId: null as string | number | null,
+    month: null as number | null,
     date: null,
     year: null,
-    month: null,
     sortBy: 'date',
     sortOrder: 'desc',
     page: 0,
     size: 20
   };
 
-  constructor(
-    private transactionService: TransactionService,
-    private categoryService: CategoryService,
-    private userService: UserService
-  ) {}
+  constructor (private transactionService: TransactionService) {}
 
   ngOnInit(): void {
-    this.fetchCategories();
-    this.fetchUsers();
     this.fetchYears();
     this.fetchTransactions();
-    this.fetchMonths();
-  }
-
-  fetchCategories(): void {
-    this.categoryService.getCategoriesByType(this.type).subscribe(categories => {
-      this.categories = categories;
-    });
-  }
-
-  fetchUsers(): void {
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
-    })
   }
 
   fetchYears(): void {
     this.transactionService.getYears(this.type).subscribe(years => {
       this.years = years;
     })
-  }
-
-  fetchMonths(): void {
-    const params: any = {
-      month: this.months
-    }
   }
 
   toggleForm(): void {
@@ -133,6 +104,10 @@ export class TransactionComponent implements OnInit {
 
   onCategoryChange(categoryId: number | string | null): void {
     this.filters.categoryId = categoryId;
+  }
+
+  onMonthChange(month: number | null): void {
+    this.filters.month = month;
   }
 
   changePage(direction: number): void {
