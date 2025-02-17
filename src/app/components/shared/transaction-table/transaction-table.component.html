@@ -14,43 +14,12 @@
   </div>
 
   <!-- 🔍 FILTERS FORM -->
-  <form (submit)="applyFilters()">
-    <label>
-      Year:
-      <select [(ngModel)]="filters.year" name="year">
-        <option [value]="''">All</option>
-        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-      </select>
-    </label>
-
-    <label>
-      Month:
-      <app-month-dropdown
-        [selectedMonth]="filters.month"
-        (selectedMonthChange)="onMonthChange($event)">
-      </app-month-dropdown>
-    </label>
-
-    <label>
-      User:
-      <app-user-dropdown
-        [styleType]="'form'"
-        [selectedUser]="filters.userId"
-        (selectedUserChange)="onUserChange($event)">
-      </app-user-dropdown>
-    </label>
-
-    <label>
-      Category:
-      <app-category-dropdown
-        [type]="type"
-        [(selectedCategory)]="filters.categoryId"
-        (selectedCategoryChange)="onCategoryChange($event)">
-      </app-category-dropdown>
-    </label>
-
-    <button type="submit">Filter</button>
-  </form>
+  <app-transaction-filter
+    [filters]="filters"
+    [years]="years"
+    [type]="type"
+    (filtersChange)="applyFilters()">
+  </app-transaction-filter>
 
   <!-- 📊 TABLE -->
   <table>

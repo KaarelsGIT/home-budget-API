@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../services/transaction.service';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
-import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
-import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
-import {MonthDropdownComponent} from '../month-dropdown/month-dropdown.component';
+import {TransactionFilterComponent} from '../transaction-filter/transaction-filter.component';
 
 @Component({
   selector: 'app-transaction-table',
@@ -16,10 +14,8 @@ import {MonthDropdownComponent} from '../month-dropdown/month-dropdown.component
     FormsModule,
     NgIf,
     DatePipe,
-    UserDropdownComponent,
-    CategoryDropdownComponent,
-    MonthDropdownComponent,
-    TransactionFormComponent
+    TransactionFormComponent,
+    TransactionFilterComponent
   ],
   styleUrls: ['./transaction-table.component.css']
 })
@@ -45,7 +41,8 @@ export class TransactionTableComponent implements OnInit {
     size: 20
   };
 
-  constructor (private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService) {
+  }
 
   ngOnInit(): void {
     this.fetchYears();
@@ -62,7 +59,10 @@ export class TransactionTableComponent implements OnInit {
     this.isFormVisible = !this.isFormVisible;
   }
 
-  applyFilters(): void {
+  applyFilters(updatedFilters?: any): void {
+    if (updatedFilters) {
+      this.filters = { ...updatedFilters };
+    }
     this.filters.page = 0;
     this.fetchTransactions();
   }
@@ -81,7 +81,7 @@ export class TransactionTableComponent implements OnInit {
   fetchTransactions(): void {
     if (!this.type) return;
 
-    const params: any = { ...this.filters };
+    const params: any = {...this.filters};
     params.year = params.year ? Number(params.year) : null;
     params.month = params.month ? Number(params.month) : null;
     params.userId = params.userId ? Number(params.userId) : null;
@@ -96,18 +96,6 @@ export class TransactionTableComponent implements OnInit {
     }, error => {
       console.error('API error:', error);
     });
-  }
-
-  onUserChange(userId: string | number | null) {
-    this.filters.userId = userId;
-  }
-
-  onCategoryChange(categoryId: number | string | null): void {
-    this.filters.categoryId = categoryId;
-  }
-
-  onMonthChange(month: number | null): void {
-    this.filters.month = month;
   }
 
   changePage(direction: number): void {
