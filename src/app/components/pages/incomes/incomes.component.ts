@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import {TransactionComponent} from "../../components/transaction/transaction.component";
+import {TransactionTableComponent} from "../../shared/transaction-table/transaction-table.component";
 
 @Component({
   selector: 'app-incomes',
   standalone: true,
     imports: [
-        TransactionComponent
+        TransactionTableComponent
     ],
   templateUrl: './incomes.component.html',
   styleUrl: './incomes.component.css'

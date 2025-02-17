@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { CategoryService } from '../../services/category.service';
-import { Category } from '../../models/category';
+import { CategoryService } from '../../../services/category.service';
+import { Category } from '../../../models/category';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
 

@@ -1,29 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {TransactionService} from '../../services/transaction.service';
+import {TransactionService} from '../../../services/transaction.service';
 import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
-import {CategoryDropdownComponent} from '../../shared/category-dropdown/category-dropdown.component';
-import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
-import {MonthDropdownComponent} from '../../shared/month-dropdown/month-dropdown.component';
+import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
+import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
+import {MonthDropdownComponent} from '../month-dropdown/month-dropdown.component';
 
 @Component({
-  selector: 'app-transaction',
+  selector: 'app-transaction-table',
   standalone: true,
-  templateUrl: './transaction.component.html',
+  templateUrl: './transaction-table.component.html',
   imports: [
     NgForOf,
     FormsModule,
     NgIf,
     DatePipe,
-    TransactionFormComponent,
     UserDropdownComponent,
     CategoryDropdownComponent,
-    MonthDropdownComponent
+    MonthDropdownComponent,
+    TransactionFormComponent
   ],
-  styleUrls: ['./transaction.component.css']
+  styleUrls: ['./transaction-table.component.css']
 })
-export class TransactionComponent implements OnInit {
+export class TransactionTableComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
 
   isFormVisible = false;

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../models/user';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 

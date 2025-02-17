@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TransactionService} from '../../services/transaction.service';
+import {TransactionService} from '../../../services/transaction.service';
 import {FormsModule} from '@angular/forms';
 import {TitleCasePipe} from '@angular/common';
-import {UserDropdownComponent} from '../../shared/user-dropdown/user-dropdown.component';
-import {UserService} from '../../services/user.service';
-import {User} from "../../models/user";
+import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
+import {UserService} from '../../../services/user.service';
+import {User} from "../../../models/user";
 
 @Component({
-    selector: 'app-transaction-form',
+    selector: 'app-transaction-table-form',
     standalone: true,
     imports: [
         FormsModule,
@@ -67,8 +67,8 @@ export class TransactionFormComponent implements OnInit {
                 };
             },
             error: (err) => {
-                console.error('Error adding transaction:', err);
-                alert('Failed to add transaction.');
+                console.error('Error adding transaction-table:', err);
+                alert('Failed to add transaction-table.');
             }
         });
     }

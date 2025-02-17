@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import {TransactionComponent} from "../../components/transaction/transaction.component";
+import {TransactionTableComponent} from "../../shared/transaction-table/transaction-table.component";
 
 @Component({
   selector: 'app-expenses',
     imports: [
-        TransactionComponent
+        TransactionTableComponent
     ],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css'
