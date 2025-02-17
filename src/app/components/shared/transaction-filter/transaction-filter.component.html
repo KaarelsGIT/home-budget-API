@@ -1,8 +1,9 @@
-<form (submit)="applyFilters()">
+<!-- FILTER FORM -->
+<form>
   <label>
     Year:
-    <select [(ngModel)]="filters.year" name="year">
-      <option [value]="''">All</option>
+    <select [(ngModel)]="filters.year" name="year" (change)="onFilterChange()">
+      <option value="">All</option>
       <option *ngFor="let year of years" [value]="year">{{ year }}</option>
     </select>
   </label>
@@ -33,5 +34,8 @@
     </app-category-dropdown>
   </label>
 
-  <button type="submit">Filter</button>
+  <!-- SHOW BUTTON ONLY IF FILTERS ARE SET -->
+  <button *ngIf="isFilterActive()" type="button" (click)="clearFilters()" class="clear-filters">
+    Clear Filters
+  </button>
 </form>

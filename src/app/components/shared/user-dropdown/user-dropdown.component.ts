@@ -68,8 +68,11 @@ export class UserDropdownComponent implements OnInit {
   }
 
   setActiveUserFromId(userId: string | number): void {
-    const user = this.users.find(u => u.id == userId) || null;
-    this.activeUser = user;
+    if (userId === null) {
+      this.fetchUsers();
+    }
+
+    this.activeUser = this.users.find(u => u.id == userId) || null;
     this.selectedUserChange.emit(userId);
   }
 }
