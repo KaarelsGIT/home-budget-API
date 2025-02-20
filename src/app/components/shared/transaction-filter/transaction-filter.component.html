@@ -1,38 +1,34 @@
 <!-- FILTER FORM -->
 <form>
-  <label>
-    Year:
+  <div>
     <select [(ngModel)]="filters.year" name="year" (change)="onFilterChange()">
-      <option value="">All</option>
+      <option value=null>All years</option>
       <option *ngFor="let year of years" [value]="year">{{ year }}</option>
     </select>
-  </label>
+  </div>
 
-  <label>
-    Month:
+  <div>
     <app-month-dropdown
       [selectedMonth]="filters.month"
       (selectedMonthChange)="onMonthChange($event)">
     </app-month-dropdown>
-  </label>
+  </div>
 
-  <label>
-    User:
+  <div>
     <app-user-dropdown
       [styleType]="'form'"
       [selectedUser]="filters.userId"
       (selectedUserChange)="onUserChange($event)">
     </app-user-dropdown>
-  </label>
+  </div>
 
-  <label>
-    Category:
+  <div>
     <app-category-dropdown
       [type]="type"
       [(selectedCategory)]="filters.categoryId"
       (selectedCategoryChange)="onCategoryChange($event)">
     </app-category-dropdown>
-  </label>
+  </div>
 
   <!-- SHOW BUTTON ONLY IF FILTERS ARE SET -->
   <button *ngIf="isFilterActive()" type="button" (click)="clearFilters()" class="clear-filters">

@@ -1,6 +1,6 @@
 <div>
   <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-    <option value=null>All Categories</option>
+    <option [value]=null>All Categories</option>
     <option *ngFor="let category of categories" [value]="category.id">
       {{ category.name }}
     </option>

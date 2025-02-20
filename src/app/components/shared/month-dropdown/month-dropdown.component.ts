@@ -28,15 +28,13 @@ export const MONTHS = [
   styleUrl: './month-dropdown.component.css'
 })
 export class MonthDropdownComponent {
-  @Input({transform: numberAttribute}) selectedMonth: number | null = null;
-  @Output() selectedMonthChange = new EventEmitter<number | null>(); // ✅ Õige nimi
+  @Input() selectedMonth: number | null = null;
+  @Output() selectedMonthChange = new EventEmitter<number | null>();
 
   months = MONTHS;
 
-  onMonthChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.selectedMonthChange.emit(value ? Number(value) : null); // ✅ Õige väärtus
+  onMonthChange(value: number | string | null): void {
+    this.selectedMonth = value ? Number(value) : null;
+    this.selectedMonthChange.emit(this.selectedMonth);
   }
-
-  protected readonly Number = Number;
 }
