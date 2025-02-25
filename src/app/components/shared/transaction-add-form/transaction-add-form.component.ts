@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TransactionService} from '../../../services/transaction.service';
 import {FormsModule} from '@angular/forms';
 import {TitleCasePipe} from '@angular/common';
-import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 import {UserService} from '../../../services/user.service';
 import {User} from "../../../models/user";
 
@@ -13,10 +12,10 @@ import {User} from "../../../models/user";
         FormsModule,
         TitleCasePipe
     ],
-    templateUrl: './transaction-form.component.html',
-    styleUrl: './transaction-form.component.css'
+    templateUrl: './transaction-add-form.component.html',
+    styleUrl: './transaction-add-form.component.css'
 })
-export class TransactionFormComponent implements OnInit {
+export class TransactionAddFormComponent implements OnInit {
     @Input() type!: 'income' | 'expense';
     @Output() transactionAdded = new EventEmitter<void>();
 

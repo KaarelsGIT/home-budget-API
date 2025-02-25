@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../services/transaction.service';
-import {TransactionFormComponent} from '../transaction-form/transaction-form.component';
+import {TransactionAddFormComponent} from '../transaction-add-form/transaction-add-form.component';
 import {TransactionFilterComponent} from '../transaction-filter/transaction-filter.component';
 
 @Component({
@@ -14,7 +14,7 @@ import {TransactionFilterComponent} from '../transaction-filter/transaction-filt
     FormsModule,
     NgIf,
     DatePipe,
-    TransactionFormComponent,
+    TransactionAddFormComponent,
     TransactionFilterComponent
   ],
   styleUrls: ['./transaction-table.component.css']
