@@ -10,7 +10,10 @@
 
   <!-- ADD FORM -->
   <div *ngIf="isFormVisible">
-    <app-transaction-table-form [type]="type"></app-transaction-table-form>
+    <app-transaction-add-form
+      [type]="type"
+      (transactionAdded)="refreshTable()">
+    </app-transaction-add-form>
   </div>
 
   <!-- 🔍 FILTERS FORM -->

@@ -102,4 +102,8 @@ export class TransactionTableComponent implements OnInit {
     this.filters.page += direction;
     this.fetchTransactions();
   }
+
+  refreshTable(): void {
+    this.fetchTransactions();
+  }
 }

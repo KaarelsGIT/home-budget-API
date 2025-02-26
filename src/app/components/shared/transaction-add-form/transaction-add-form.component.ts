@@ -10,7 +10,7 @@ import {CategoryService} from '../../../services/category.service';
 import {Category} from '../../../models/category';
 
 @Component({
-  selector: 'app-transaction-table-form',
+  selector: 'app-transaction-add-form',
   standalone: true,
   imports: [
     FormsModule,
