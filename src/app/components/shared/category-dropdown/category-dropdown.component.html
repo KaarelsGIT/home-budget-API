@@ -1,7 +1,7 @@
 <!-- FILTER -->
 <div>
   <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-    <option [value]=null>All Categories</option>
+    <option [value]="null" disabled selected>{{ placeholder }}</option>
     <option *ngFor="let category of categories" [value]="category.id">
       {{ category.name }}
     </option>

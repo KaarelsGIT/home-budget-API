@@ -16,6 +16,7 @@
         <label>Category:</label>
         <app-category-dropdown
           [type]="type"
+          [placeholder]="'Choose Category'"
           (selectedCategoryChange)="onCategoryChange($event)">
         </app-category-dropdown>
       </div>

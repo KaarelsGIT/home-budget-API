@@ -11,7 +11,6 @@ import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.
   imports: [
     FormsModule,
     NgForOf,
-    MonthDropdownComponent,
     UserDropdownComponent,
     CategoryDropdownComponent,
     NgIf

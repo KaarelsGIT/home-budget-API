@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/category';
 import {FormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-category-dropdown',
@@ -15,6 +15,7 @@ import {NgForOf} from '@angular/common';
 })
 export class CategoryDropdownComponent implements OnInit {
   @Input() type: 'income' | 'expense' = 'income';
+  @Input() placeholder: string = 'All Categories';
   @Input() selectedCategory: string | number | null = null;
   @Output() selectedCategoryChange = new EventEmitter<string | number | null>();
 
