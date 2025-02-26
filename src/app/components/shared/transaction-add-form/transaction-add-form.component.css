@@ -1,88 +1,94 @@
+/* General form container */
 .form-container {
   margin: 30px auto;
-  padding: 20px;
-  max-width: 800px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Title styling */
 .form-container h2 {
   color: forestgreen;
-  font-size: 24px;
+  font-size: 26px;
+  text-align: center;
   margin-bottom: 20px;
 }
 
+/* Form layout */
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
-form label {
+/* Form row for side-by-side inputs */
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Form group layout */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
+  margin-bottom: 5px;
   color: #333;
 }
 
-form input,
-form select {
+/* Input and dropdown styling */
+input,
+select {
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 16px;
   width: 100%;
   box-sizing: border-box;
+  transition: border 0.3s ease-in-out;
 }
 
-form input[type="number"] {
-  -moz-appearance: textfield;
+input:focus,
+select:focus {
+  border: 1px solid forestgreen;
+  outline: none;
 }
 
-form button {
-  padding: 10px 20px;
-  background-color: forestgreen;
+/* Button styling */
+button {
+  padding: 12px 20px;
+  background: forestgreen;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
 }
 
-form button:hover {
-  background-color: darkgreen;
+button:hover {
+  background: darkgreen;
 }
 
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  .form-container {
-    padding: 15px;
-  }
-
-  form {
+  .form-row {
     flex-direction: column;
   }
 
-  form button {
+  button {
     font-size: 14px;
-    padding: 8px 16px;
-  }
-
-  .user-dropdown .user-dropdown {
-    color: black; /* Tee font nähtavaks */
-    font-size: 16px;
-  }
-
-  .user-dropdown.dropdown-menu {
-    background-color: #f8f9fa; /* Heledam taust */
-    color: black; /* Tekst mustaks */
-  }
-
-  .user-dropdown.dropdown-menu li {
-    color: black;
-  }
-
-  .user-dropdown.dropdown-menu li:hover {
-    background-color: #e9ecef;
+    padding: 10px;
   }
 }

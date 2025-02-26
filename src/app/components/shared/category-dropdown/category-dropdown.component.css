@@ -5,4 +5,12 @@ select {
   font-size: 16px;
   width: 100%;
   max-width: 300px;
+  background-color: white;
+  cursor: pointer;
+  transition: border 0.3s ease-in-out;
+}
+
+select:focus {
+  border-color: forestgreen;
+  outline: none;
 }
