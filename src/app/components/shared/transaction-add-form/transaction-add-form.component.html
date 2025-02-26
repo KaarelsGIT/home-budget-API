@@ -3,22 +3,26 @@
 
     <form (submit)="addTransaction()">
 
-<!--        <app-user-dropdown [styleType]="'form'" (selectedUserChange)="onUserChange($event)"></app-user-dropdown>-->
+        <app-user-dropdown
+          [styleType]="'form'"
+          (selectedUserChange)="onUserChange($event)">
+        </app-user-dropdown>
 
-        <label>
-            Amount (€):
-            <input type="number" name="amount" required>
-        </label>
+      <label>
+        Amount (€):
+        <input type="number" [(ngModel)]="transaction.amount" name="amount" required>
+      </label>
 
-        <label>
-            Date:
-            <input type="date" [(ngModel)]="transaction.date" name="date" required>
-        </label>
+      <label>
+        Date:
+        <input type="date" [(ngModel)]="transaction.date" name="date" required>
+      </label>
 
-        <label>
-            Category:
-            <input type="text" [(ngModel)]="transaction.category" name="category">
-        </label>
+<!--      <app-category-dropdown-->
+<!--        [type]="type"-->
+<!--        [(selectedCategory)]="transaction.category"-->
+<!--        (selectedCategoryChange)="onCategoryChange($event)">-->
+<!--      </app-category-dropdown>-->
 
         <label>
             Description:
