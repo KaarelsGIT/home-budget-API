@@ -18,11 +18,10 @@
         <input type="date" [(ngModel)]="transaction.date" name="date" required>
       </label>
 
-<!--      <app-category-dropdown-->
-<!--        [type]="type"-->
-<!--        [(selectedCategory)]="transaction.category"-->
-<!--        (selectedCategoryChange)="onCategoryChange($event)">-->
-<!--      </app-category-dropdown>-->
+      <app-category-dropdown
+        [type]="type"
+        (selectedCategoryChange)="onCategoryChange($event)">
+      </app-category-dropdown>
 
         <label>
             Description:

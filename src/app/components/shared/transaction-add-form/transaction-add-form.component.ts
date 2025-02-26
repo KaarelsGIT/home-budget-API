@@ -6,6 +6,8 @@ import {UserService} from '../../../services/user.service';
 import {User} from "../../../models/user";
 import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
+import {CategoryService} from '../../../services/category.service';
+import {Category} from '../../../models/category';
 
 @Component({
   selector: 'app-transaction-table-form',
@@ -23,22 +25,23 @@ export class TransactionAddFormComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
   @Output() transactionAdded = new EventEmitter<void>();
 
+  ngOnInit(): void {
+  }
+
+  constructor(private transactionService: TransactionService,
+              private userService: UserService,
+              private categoryService: CategoryService) {
+  }
+
   activeUser: User | null = null;
 
   transaction = {
     user: null as User | null,
-    category: null,
+    category: null as Category | null,
     amount: null,
     date: '',
     description: ''
   };
-
-  constructor(private transactionService: TransactionService,
-              private userService: UserService) {
-  }
-
-  ngOnInit(): void {
-  }
 
   onUserChange(userId: string | number | null): void {
     if (userId === null) {
@@ -49,6 +52,17 @@ export class TransactionAddFormComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(user => {
       this.transaction.user = user;
     });
+  }
+
+  onCategoryChange(categoryId: string | number | null): void {
+    if (categoryId === null) {
+      this.transaction.category = null;
+      return;
+    }
+
+    this.categoryService.getCategoryById(categoryId).subscribe(category => {
+        this.transaction.category = category;
+      });
   }
 
 
