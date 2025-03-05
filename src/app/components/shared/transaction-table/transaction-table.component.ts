@@ -103,6 +103,30 @@ export class TransactionTableComponent implements OnInit {
     this.fetchTransactions();
   }
 
+  onEdit() {
+    console.log('Edit clicked');
+  }
+
+  onDelete(type: 'income' | 'expense', id: number) {
+    if (confirm('Are you sure you want to delete this transaction?')) {
+      this.transactionService.deleteTransaction(type, id).subscribe({
+        next: (response) => {
+          if (response && response.success) {
+            console.log(`Transaction ${id} deleted!`);
+            this.refreshTable(); // Refresh the table after successful deletion
+          } else {
+            console.error('Unexpected response format', response);
+            // Optionally, you can notify the user of a failure here
+          }
+        },
+        error: (err) => {
+          console.error('Delete failed:', err);
+          // Notify the user about the error here
+        }
+      });
+    }
+  }
+
   refreshTable(): void {
     this.fetchTransactions();
   }

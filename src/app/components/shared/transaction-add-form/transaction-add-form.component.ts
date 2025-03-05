@@ -23,9 +23,13 @@ import {Category} from '../../../models/category';
 })
 export class TransactionAddFormComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
+  @Input() activeUser: User | null = null;
   @Output() transactionAdded = new EventEmitter<void>();
 
   ngOnInit(): void {
+    if (this.activeUser) {
+      this.transaction.user = this.activeUser;
+    }
   }
 
   constructor(private transactionService: TransactionService,
@@ -33,10 +37,8 @@ export class TransactionAddFormComponent implements OnInit {
               private categoryService: CategoryService) {
   }
 
-  activeUser: User | null = null;
-
   transaction = {
-    user: null as User | null,
+    user: this.activeUser as User | null,
     category: null as Category | null,
     amount: null,
     date: '',

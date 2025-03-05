@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,17 @@ export class TransactionService {
 
     const apiUrl = `${this.url}/${type}s/all`;
     return this.http.get<any>(apiUrl, { params });
+  }
+
+  deleteTransaction(type: 'income' | 'expense', id: number): Observable<any> {
+    return this.http.delete<any>(`${this.url}/${type}s/delete/${id}`).pipe(
+      map((response: any) => {
+        if (response === null || response === undefined) {
+          return { success: true };
+        }
+        return response;
+      })
+    );
   }
 
   getYears(type: 'income' | 'expense'): Observable<any[]> {

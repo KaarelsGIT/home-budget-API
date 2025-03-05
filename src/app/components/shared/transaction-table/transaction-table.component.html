@@ -59,6 +59,7 @@
       </span>
       </th>
       <th>Comments</th>
+      <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -69,6 +70,14 @@
       <td>{{ transaction.amount }} €</td>
       <td>{{ transaction.created | date:'dd.MM.yyyy - HH:mm' }}</td>
       <td>{{ transaction.description }}</td>
+      <td class="action-buttons">
+        <button class="edit-button" (click)="onEdit()">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="delete-button" (click)="onDelete(type, transaction.id)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -82,7 +91,6 @@
 
   <!-- 📊 SUMMARY -->
   <div class="summary">
-    <h3>Summary:</h3>
     <p>PageAmount: {{ pageTotal }} EUR</p>
     <p>All Total (with filters): {{ allTotal }} EUR</p>
   </div>

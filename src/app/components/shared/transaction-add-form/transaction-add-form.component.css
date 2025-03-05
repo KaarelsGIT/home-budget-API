@@ -2,7 +2,8 @@
 .form-container {
   margin: 30px auto;
   padding: 25px;
-  max-width: 600px;
+  max-width: 1000px;
+  width: 90%;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -92,3 +93,5 @@ button:hover {
     padding: 10px;
   }
 }
+
+
