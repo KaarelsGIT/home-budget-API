@@ -8,12 +8,10 @@
   </div>
 
   <div>
-    <app-category-dropdown
-      [type]="type"
-      [placeholder]="'All Categories'"
-      [(selectedCategory)]="filters.categoryId"
-      (selectedCategoryChange)="onCategoryChange($event)">
-    </app-category-dropdown>
+    <app-month-dropdown
+      [selectedMonth]="filters.month"
+      (selectedMonthChange)="onMonthChange($event)">
+    </app-month-dropdown>
   </div>
 
   <div>

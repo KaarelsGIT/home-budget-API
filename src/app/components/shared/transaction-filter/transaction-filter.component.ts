@@ -13,7 +13,8 @@ import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.
     NgForOf,
     UserDropdownComponent,
     CategoryDropdownComponent,
-    NgIf
+    NgIf,
+    MonthDropdownComponent
   ],
   templateUrl: './transaction-filter.component.html',
   styleUrl: './transaction-filter.component.css'

@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../services/transaction.service';
 import {TransactionAddFormComponent} from '../transaction-add-form/transaction-add-form.component';
 import {TransactionFilterComponent} from '../transaction-filter/transaction-filter.component';
+import {TransactionUpdateFormComponent} from '../transaction-update-form/transaction-update-form.component';
 
 @Component({
   selector: 'app-transaction-table',
@@ -15,7 +16,8 @@ import {TransactionFilterComponent} from '../transaction-filter/transaction-filt
     NgIf,
     DatePipe,
     TransactionAddFormComponent,
-    TransactionFilterComponent
+    TransactionFilterComponent,
+    TransactionUpdateFormComponent
   ],
   styleUrls: ['./transaction-table.component.css']
 })
@@ -23,6 +25,7 @@ export class TransactionTableComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
 
   isFormVisible = false;
+  selectedTransactionId: number | null = null;
 
   transactions: any[] = [];
   years: any[] = [];
@@ -103,8 +106,12 @@ export class TransactionTableComponent implements OnInit {
     this.fetchTransactions();
   }
 
-  onEdit() {
-    console.log('Edit clicked');
+  getSelectedTransaction() {
+    return this.transactions.find(t => t.id === this.selectedTransactionId);
+  }
+
+  onEdit(transactionId: number) {
+    this.selectedTransactionId = this.selectedTransactionId === transactionId ? null : transactionId;
   }
 
   onDelete(type: 'income' | 'expense', id: number) {

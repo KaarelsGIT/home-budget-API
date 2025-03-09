@@ -71,12 +71,19 @@
       <td>{{ transaction.created | date:'dd.MM.yyyy - HH:mm' }}</td>
       <td>{{ transaction.description }}</td>
       <td class="action-buttons">
-        <button class="edit-button" (click)="onEdit()">
+        <button class="edit-button" (click)="onEdit(transaction.id)">
           <i class="fas fa-edit"></i>
         </button>
         <button class="delete-button" (click)="onDelete(type, transaction.id)">
           <i class="fas fa-trash"></i>
         </button>
+      </td>
+    </tr>
+
+    
+    <tr *ngIf="selectedTransactionId !== null">
+      <td colspan="7">
+        <app-transaction-update-form [transaction]="getSelectedTransaction()"></app-transaction-update-form>
       </td>
     </tr>
     </tbody>

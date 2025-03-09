@@ -12,9 +12,14 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
-  getCategoriesByType(type: 'income' | 'expense'): Observable<any[]> {
-    return this.http.get<any>(`${this.url}/all?type=${type}`).pipe(
-      map(response => response.content)
+  getCategoriesByType(type: 'income' | 'expense', asList: boolean = false): Observable<Category[]> {
+    return this.http.get<any>(`${this.url}/all?type=${type}&asList=${asList}`).pipe(
+      map(response => {
+        if (asList) {
+          return response as Category[];
+        }
+        return response.content as Category[];
+      })
     );
   }
 

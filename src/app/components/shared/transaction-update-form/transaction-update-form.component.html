@@ -1,1 +1,12 @@
-<p>transaction-update-form works!</p>
+<form>
+  <label>User:</label>
+  <input type="text" [value]="transaction.user?.username" disabled />
+
+  <label>Amount:</label>
+  <input type="number" [(ngModel)]="transaction.amount" />
+
+  <label>Description:</label>
+  <input type="text" [(ngModel)]="transaction.description" />
+
+  <button type="submit">Save</button>
+</form>
