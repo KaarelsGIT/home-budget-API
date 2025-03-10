@@ -25,6 +25,7 @@
   <div>
     <app-category-dropdown
       [type]="type"
+      [asList]="true"
       [(selectedCategory)]="filters.categoryId"
       (selectedCategoryChange)="onCategoryChange($event)">
     </app-category-dropdown>

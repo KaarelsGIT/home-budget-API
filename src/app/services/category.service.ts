@@ -13,6 +13,9 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   getCategoriesByType(type: 'income' | 'expense', asList: boolean = false): Observable<Category[]> {
+    console.log(type);
+    console.log(asList);
+    console.log(`${this.url}/all?type=${type}&asList=${asList}`)
     return this.http.get<any>(`${this.url}/all?type=${type}&asList=${asList}`).pipe(
       map(response => {
         if (asList) {
