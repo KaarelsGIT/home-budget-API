@@ -88,10 +88,10 @@ export class TransactionAddFormComponent implements OnInit {
         alert(`${this.type} added successfully!`);
         this.transactionAdded.emit();
         this.transaction = {
-          user: null,  // <-- Reset user valik
-          category: null,
+          user: this.transaction.user,
+          category: this.transaction.category,
           amount: null,
-          date: '',
+          date: this.transaction.date,
           description: ''
         };
       },
