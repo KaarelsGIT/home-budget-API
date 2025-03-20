@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {UserService} from '../../../services/user.service';
+import {User} from '../../../models/user';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {ActiveUserService} from '../../../services/active-user.service';
 
 @Component({
   selector: 'app-user-dropdown',
@@ -19,13 +20,16 @@ export class UserDropdownComponent implements OnInit {
   @Input() selectedUser: number | string | null = null;
   @Input() styleType: 'header' | 'form' = 'form';
   @Output() selectedUserChange = new EventEmitter<string | number | null>();
+  @Input() placeholder: string = 'All Users';
 
   users: User[] = [];
   activeUser: User | null = null;
   isDropdownOpen = false;
-  backendError = false;  // Vea lipu määramine
+  backendError = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,
+              private activeUserService: ActiveUserService) {
+  }
 
   ngOnInit(): void {
     this.fetchUsers();
