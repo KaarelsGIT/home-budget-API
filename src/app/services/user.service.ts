@@ -13,6 +13,10 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
+  addUser(User: User): Observable<User> {
+    return this.http.post<User>(`${this.url}/users`, User)
+  }
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.url}/all`);
   }
