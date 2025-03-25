@@ -17,7 +17,6 @@ import {TransactionUpdateFormComponent} from '../transaction-update-form/transac
     DatePipe,
     TransactionAddFormComponent,
     TransactionFilterComponent,
-    TransactionUpdateFormComponent
   ],
   styleUrls: ['./transaction-table.component.css']
 })
@@ -70,17 +69,6 @@ export class TransactionTableComponent implements OnInit {
     this.fetchTransactions();
   }
 
-  setSort(column: string): void {
-    if (this.filters.sortBy === column) {
-      this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.filters.sortBy = column;
-      this.filters.sortOrder = 'desc';
-    }
-
-    this.fetchTransactions();
-  }
-
   fetchTransactions(): void {
     if (!this.type) return;
 
@@ -106,12 +94,17 @@ export class TransactionTableComponent implements OnInit {
     this.fetchTransactions();
   }
 
-  getSelectedTransaction() {
-    return this.transactions.find(t => t.id === this.selectedTransactionId);
+  onEdit(transaction: any) {
+    this.selectedTransactionId = this.selectedTransactionId === transaction.id ? null : transaction.id;
   }
 
-  onEdit(transactionId: number) {
-    this.selectedTransactionId = this.selectedTransactionId === transactionId ? null : transactionId;
+  onSave(transaction: any) {
+    this.transactionService.updateTransaction(transaction).subscribe(() => {
+      this.selectedTransactionId = null;
+      this.fetchTransactions(); // Värskenda tabel pärast salvestamist
+    }, error => {
+      console.error('Update failed:', error);
+    });
   }
 
   onDelete(type: 'income' | 'expense', id: number) {

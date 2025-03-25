@@ -45,4 +45,8 @@ export class TransactionService {
   getYears(type: 'income' | 'expense'): Observable<any[]> {
     return this.http.get<any>(`${this.url}/${type}s/years`);
   }
+
+  updateTransaction(transaction: any): Observable<any> {
+    return this.http.post<any>(`${this.url}/${transaction.type}s/update/${transaction.id}`, transaction);
+  }
 }

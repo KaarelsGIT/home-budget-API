@@ -28,36 +28,11 @@
   <table>
     <thead>
     <tr>
-      <th (click)="setSort('user')">
-        User
-        <span *ngIf="filters.sortBy === 'user'">
-          {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
-        </span>
-      </th>
-      <th (click)="setSort('date')">
-        Date
-        <span *ngIf="filters.sortBy === 'date'">
-          {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
-        </span>
-      </th>
-      <th (click)="setSort('category')">
-        Category
-        <span *ngIf="filters.sortBy === 'category'">
-          {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
-        </span>
-      </th>
-      <th (click)="setSort('amount')">
-        Amount
-        <span *ngIf="filters.sortBy === 'amount'">
-          {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
-        </span>
-      </th>
-      <th (click)="setSort('created')">
-        Created
-        <span *ngIf="filters.sortBy === 'created'">
-        {{ filters.sortOrder === 'asc' ? '▲' : '▼' }}
-      </span>
-      </th>
+      <th>User</th>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Created</th>
       <th>Comments</th>
       <th>Actions</th>
     </tr>
@@ -67,23 +42,25 @@
       <td>{{ transaction.user?.username || 'No user' }}</td>
       <td>{{ transaction.date | date:'dd.MM.yyyy' }}</td>
       <td>{{ transaction.category?.name }}</td>
-      <td>{{ transaction.amount }} €</td>
+      <td>
+        <input *ngIf="transaction.id === selectedTransactionId" type="number" [(ngModel)]="transaction.amount" />
+        <span *ngIf="transaction.id !== selectedTransactionId">{{ transaction.amount }} €</span>
+      </td>
       <td>{{ transaction.created | date:'dd.MM.yyyy - HH:mm' }}</td>
-      <td>{{ transaction.description }}</td>
+      <td>
+        <input *ngIf="transaction.id === selectedTransactionId" type="text" [(ngModel)]="transaction.description" />
+        <span *ngIf="transaction.id !== selectedTransactionId">{{ transaction.description }}</span>
+      </td>
       <td class="action-buttons">
-        <button class="edit-button" (click)="onEdit(transaction.id)">
+        <button class="edit-button" (click)="onEdit(transaction)">
           <i class="fas fa-edit"></i>
+        </button>
+        <button *ngIf="transaction.id === selectedTransactionId" class="save-button" (click)="onSave(transaction)">
+          Save
         </button>
         <button class="delete-button" (click)="onDelete(type, transaction.id)">
           <i class="fas fa-trash"></i>
         </button>
-      </td>
-    </tr>
-
-    
-    <tr *ngIf="selectedTransactionId !== null">
-      <td colspan="7">
-        <app-transaction-update-form [transaction]="getSelectedTransaction()"></app-transaction-update-form>
       </td>
     </tr>
     </tbody>
