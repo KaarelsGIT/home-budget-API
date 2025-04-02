@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/categories/add
+Content-Type: application/json;
+
+{
+    "name": "Test",
+    "type": "EXPENSE",
+    "description": "testin, kas siin saab kategooriat lisada!",
+    "recurringPayment": true
+}

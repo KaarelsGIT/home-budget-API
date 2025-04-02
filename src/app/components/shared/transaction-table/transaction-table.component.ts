@@ -101,7 +101,7 @@ export class TransactionTableComponent implements OnInit {
   onSave(transaction: any) {
     this.transactionService.updateTransaction(transaction).subscribe(() => {
       this.selectedTransactionId = null;
-      this.fetchTransactions(); // Värskenda tabel pärast salvestamist
+      this.refreshTable();
     }, error => {
       console.error('Update failed:', error);
     });
