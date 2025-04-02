@@ -1,0 +1,44 @@
+/* Sidebar */
+.sidebar {
+  width: 250px; /* Fikseeritud laius */
+  height: 100vh; /* Võtab kogu ekraani kõrguse */
+  background-color: #2c3e50;
+  color: white;
+  padding-top: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  border-right: 2px solid #1a252f;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 15px 20px;
+}
+
+.sidebar-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.sidebar-menu li a:hover {
+  background-color: #34495e;
+  border-radius: 4px;
+}
+
+/* Mobiilivaates väiksem sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+}
