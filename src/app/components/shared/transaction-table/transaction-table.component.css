@@ -14,14 +14,28 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.table-container {
+  max-height: 672px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 0px;
   background-color: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  table-layout: fixed;
+
+}
+
+table thead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
 }
 
 table th, table td {
