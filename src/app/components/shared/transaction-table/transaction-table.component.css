@@ -50,9 +50,9 @@ table th {
   font-size: 18px;
 }
 
-th:nth-child(6), td:nth-child(6) { /* 6. veerg ehk "Comments" */
-  width: 30%; /* Tee see laiemaks */
-  min-width: 200px; /* Väldi liiga väikest suurust */
+th:nth-child(6), td:nth-child(6) {
+  width: 30%;
+  min-width: 200px;
 }
 
 table td {
