@@ -86,7 +86,13 @@ table td {
   font-size: 16px;
 }
 
-
+/* .action-buttons on konteiner, kus on nupud */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
 
 .add-button {
   padding: 10px 20px;
