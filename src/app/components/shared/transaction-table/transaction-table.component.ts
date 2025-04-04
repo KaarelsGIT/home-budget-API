@@ -119,7 +119,7 @@ export class TransactionTableComponent implements OnInit {
 
   onSave(updatedTransaction: any) {
     console.log('Saving transaction:', updatedTransaction);
-    // Saada update serverile, kui vaja
+    // TODO: Need to add method to update server as well!
     this.closeModal();
   }
 

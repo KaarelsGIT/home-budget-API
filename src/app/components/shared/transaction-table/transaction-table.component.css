@@ -69,7 +69,7 @@ tr:nth-child(odd) {
 }
 
 tr:hover {
-  background-color: #eef;
+  background-color: #e8f5e9;
 }
 
 td:nth-child(4) {
