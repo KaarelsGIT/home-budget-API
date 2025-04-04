@@ -104,3 +104,11 @@
     <p>All Total (with filters): {{ allTotal }} EUR</p>
   </div>
 </div>
+
+<!-- MODAL for Editing -->
+<app-transaction-update-form
+  [transaction]="editedTransaction"
+  [isVisible]="isModalVisible"
+  (close)="closeModal()"
+  (save)="onSave($event)">
+</app-transaction-update-form>

@@ -1,12 +1,20 @@
-<form>
-  <label>User:</label>
-  <input type="text" [value]="transaction.user?.username" disabled />
+<div class="modal-backdrop" *ngIf="isVisible">
+  <div class="modal">
+    <h2>Edit Transaction</h2>
+    <form (ngSubmit)="onSave()">
+      <label>User:</label>
+      <input type="text" [value]="transaction?.user?.username" disabled />
 
-  <label>Amount:</label>
-  <input type="number" [(ngModel)]="transaction.amount" />
+      <label>Amount:</label>
+      <input type="number" [(ngModel)]="transaction.amount" name="amount" required />
 
-  <label>Description:</label>
-  <input type="text" [(ngModel)]="transaction.description" />
+      <label>Description:</label>
+      <input type="text" [(ngModel)]="transaction.description" name="description" />
 
-  <button type="submit">Save</button>
-</form>
+      <div class="modal-buttons">
+        <button type="submit">Save</button>
+        <button type="button" (click)="onClose()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

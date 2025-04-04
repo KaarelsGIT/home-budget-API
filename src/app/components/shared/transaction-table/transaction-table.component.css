@@ -38,26 +38,55 @@ table thead {
   z-index: 100;
 }
 
-table th, table td {
+table th, td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: none;
+  border-collapse: collapse;
 }
 
 table th {
   background-color: forestgreen;
   color: mintcream;
   font-size: 18px;
+  text-align: center;
+}
+
+td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5) {
+  text-align: center !important;
+}
+
+.action-buttons {
+  align-content: center;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+tr:hover {
+  background-color: #eef;
+}
+
+td:nth-child(4) {
+  text-align: right !important;
+  padding-right: 40px !important;
 }
 
 th:nth-child(6), td:nth-child(6) {
-  width: 30%;
+  width: 32%;
   min-width: 200px;
 }
 
 table td {
   font-size: 16px;
 }
+
+
 
 .add-button {
   padding: 10px 20px;

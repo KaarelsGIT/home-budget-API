@@ -25,7 +25,9 @@ export class TransactionTableComponent implements OnInit {
   @Input() type!: 'income' | 'expense';
 
   isFormVisible = false;
+  isModalVisible = false;
   selectedTransactionId: number | null = null;
+  editedTransaction: any = null;
 
   transactions: any[] = [];
   years: any[] = [];
@@ -111,7 +113,19 @@ export class TransactionTableComponent implements OnInit {
   }
 
   onEdit(transactionId: number) {
-    this.selectedTransactionId = this.selectedTransactionId === transactionId ? null : transactionId;
+    this.editedTransaction = this.transactions.find(t => t.id === transactionId);
+    this.isModalVisible = true;
+  }
+
+  onSave(updatedTransaction: any) {
+    console.log('Saving transaction:', updatedTransaction);
+    // Saada update serverile, kui vaja
+    this.closeModal();
+  }
+
+  closeModal() {
+    this.isModalVisible = false;
+    this.editedTransaction = null;
   }
 
   onDelete(type: 'income' | 'expense', id: number) {
