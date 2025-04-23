@@ -18,12 +18,19 @@ export class TransactionUpdateFormComponent {
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
+  isLoading = false;
+
   onSave() {
+    if (this.isLoading) return; // Prevent multiple submissions
+
+    this.isLoading = true;
     this.save.emit(this.transaction);
-    this.close.emit();
+    // The loading state will be reset when the modal is closed
   }
 
   onClose() {
+    this.isLoading = false;
     this.close.emit();
   }
+
 }

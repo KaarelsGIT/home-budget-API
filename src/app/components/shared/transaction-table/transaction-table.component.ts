@@ -117,11 +117,27 @@ export class TransactionTableComponent implements OnInit {
     this.isModalVisible = true;
   }
 
+  // onSave(updatedTransaction: any) {
+  //   console.log('Saving transaction:', updatedTransaction);
+  //   // TODO: Need to add method to update server as well!
+  //   this.closeModal();
+  // }
+
   onSave(updatedTransaction: any) {
-    console.log('Saving transaction:', updatedTransaction);
-    // TODO: Need to add method to update server as well!
-    this.closeModal();
+    this.transactionService.updateTransaction(this.type, updatedTransaction.id, updatedTransaction)
+      .subscribe({
+        next: (response) => {
+          console.log('Transaction updated successfully:', response);
+          this.refreshTable(); // Refresh the table to show updated data
+          this.closeModal();
+        },
+        error: (error) => {
+          console.error('Error updating transaction:', error);
+          // Here you could add error handling, like showing an error message to the user
+        }
+      });
   }
+
 
   closeModal() {
     this.isModalVisible = false;

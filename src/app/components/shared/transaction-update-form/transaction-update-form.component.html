@@ -5,6 +5,9 @@
       <label>User:</label>
       <input type="text" [value]="transaction?.user?.username" disabled />
 
+      <label>Category:</label>
+      <input type="text" [value]="transaction?.category?.name" disabled />
+
       <label>Amount:</label>
       <input type="number" [(ngModel)]="transaction.amount" name="amount" required />
 
@@ -12,9 +15,12 @@
       <input type="text" [(ngModel)]="transaction.description" name="description" />
 
       <div class="modal-buttons">
-        <button type="submit">Save</button>
-        <button type="button" (click)="onClose()">Cancel</button>
+        <button (click)="onSave()" [disabled]="isLoading">
+          {{ isLoading ? 'Saving...' : 'Save' }}
+        </button>
+        <button (click)="onClose()" [disabled]="isLoading">Cancel</button>
       </div>
+
     </form>
   </div>
 </div>
