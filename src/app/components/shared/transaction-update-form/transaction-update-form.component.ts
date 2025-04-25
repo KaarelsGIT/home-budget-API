@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgIf} from '@angular/common';
 
@@ -12,7 +12,7 @@ import {NgIf} from '@angular/common';
   templateUrl: './transaction-update-form.component.html',
   styleUrl: './transaction-update-form.component.css'
 })
-export class TransactionUpdateFormComponent {
+export class TransactionUpdateFormComponent implements OnChanges {
   @Input() transaction: any;
   @Input() isVisible = false;
   @Output() close = new EventEmitter<void>();
@@ -20,12 +20,17 @@ export class TransactionUpdateFormComponent {
 
   isLoading = false;
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
+      this.isLoading = false;
+    }
+  }
+
   onSave() {
-    if (this.isLoading) return; // Prevent multiple submissions
+    if (this.isLoading) return;
 
     this.isLoading = true;
     this.save.emit(this.transaction);
-    // The loading state will be reset when the modal is closed
   }
 
   onClose() {

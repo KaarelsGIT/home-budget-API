@@ -117,23 +117,16 @@ export class TransactionTableComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  // onSave(updatedTransaction: any) {
-  //   console.log('Saving transaction:', updatedTransaction);
-  //   // TODO: Need to add method to update server as well!
-  //   this.closeModal();
-  // }
-
   onSave(updatedTransaction: any) {
     this.transactionService.updateTransaction(this.type, updatedTransaction.id, updatedTransaction)
       .subscribe({
         next: (response) => {
           console.log('Transaction updated successfully:', response);
-          this.refreshTable(); // Refresh the table to show updated data
+          this.refreshTable();
           this.closeModal();
         },
         error: (error) => {
           console.error('Error updating transaction:', error);
-          // Here you could add error handling, like showing an error message to the user
         }
       });
   }
@@ -142,6 +135,7 @@ export class TransactionTableComponent implements OnInit {
   closeModal() {
     this.isModalVisible = false;
     this.editedTransaction = null;
+    this.refreshTable();
   }
 
   onDelete(type: 'income' | 'expense', id: number) {
@@ -150,15 +144,13 @@ export class TransactionTableComponent implements OnInit {
         next: (response) => {
           if (response && response.success) {
             console.log(`Transaction ${id} deleted!`);
-            this.refreshTable(); // Refresh the table after successful deletion
+            this.refreshTable();
           } else {
             console.error('Unexpected response format', response);
-            // Optionally, you can notify the user of a failure here
           }
         },
         error: (err) => {
           console.error('Delete failed:', err);
-          // Notify the user about the error here
         }
       });
     }
