@@ -107,6 +107,7 @@
 
 <!-- MODAL for Editing -->
 <app-transaction-update-form
+  [type]="type"
   [transaction]="editedTransaction"
   [isVisible]="isModalVisible"
   (close)="closeModal()"
