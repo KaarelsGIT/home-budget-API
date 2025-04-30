@@ -1,10 +1,9 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
-import {CategoryService} from '../../../services/category.service';
-import {Category} from '../../../models/category';
 import {User} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
+import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
 
 @Component({
   selector: 'app-transaction-update-form',
@@ -12,7 +11,8 @@ import {UserService} from '../../../services/user.service';
   imports: [
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    CategoryDropdownComponent
   ],
   templateUrl: './transaction-update-form.component.html',
   styleUrl: './transaction-update-form.component.css'
@@ -24,10 +24,10 @@ export class TransactionUpdateFormComponent implements OnChanges, OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
+  users: User[] = [];
   isLoading = false;
 
-  categories: Category[] = [];
-  users: User[] = [];
+  constructor(private userService: UserService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
@@ -35,19 +35,8 @@ export class TransactionUpdateFormComponent implements OnChanges, OnInit {
     }
   }
 
-  ngOnInit(){
-    this.loadCategories();
+  ngOnInit() {
     this.loadUsers();
-  }
-
-  constructor(private categoryService: CategoryService,
-              private userService: UserService,) {
-  }
-
-  loadCategories() {
-    this.categoryService.getCategoriesByType(this.type, true).subscribe(categories => {
-      this.categories = categories;
-    });
   }
 
   loadUsers() {
@@ -56,9 +45,18 @@ export class TransactionUpdateFormComponent implements OnChanges, OnInit {
     });
   }
 
+  onCategoryIdChange(categoryId: string | number | null) {
+    const parsedId = categoryId !== null ? Number(categoryId) : null;
+
+    if (this.transaction.category) {
+      this.transaction.category.id = parsedId;
+    } else {
+      this.transaction.category = { id: parsedId };
+    }
+  }
+
   onSave() {
     if (this.isLoading) return;
-
     this.isLoading = true;
     this.save.emit(this.transaction);
   }

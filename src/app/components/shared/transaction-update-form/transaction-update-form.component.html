@@ -2,22 +2,23 @@
   <div class="modal">
     <h2>Edit Transaction</h2>
     <form (ngSubmit)="onSave()">
+
       <label>User:</label>
       <select [(ngModel)]="transaction.user.id" name="user" required>
-        <option [ngValue]="null">Select a user/option>
-        <option *ngFor="let user of users" [ngValue]="user.id">
+        <option [ngValue]="null">Select a user</option>
+        <option *ngFor="let user of users" [value]="user.id">
           {{ user.username }}
         </option>
       </select>
 
       <label>Category:</label>
-      <select [(ngModel)]="transaction.category.id" name="category" required>
-        <option [ngValue]="null">Select a category</option>
-        <option *ngFor="let category of categories" [ngValue]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-
+      <app-category-dropdown
+        [type]="type"
+        [asList]="true"
+        [placeholder]="'Select category'"
+        [selectedCategory]="transaction.category?.id"
+        (selectedCategoryChange)="onCategoryIdChange($event)">
+      </app-category-dropdown>
 
       <label>Amount:</label>
       <input type="number" [(ngModel)]="transaction.amount" name="amount" required/>
@@ -26,7 +27,7 @@
       <input type="text" [(ngModel)]="transaction.description" name="description"/>
 
       <div class="modal-buttons">
-        <button type="submit" (click)="onSave()" [disabled]="isLoading">
+        <button type="submit" [disabled]="isLoading">
           {{ isLoading ? 'Saving...' : 'Save' }}
         </button>
         <button type="button" (click)="onClose()" [disabled]="isLoading">Cancel</button>
