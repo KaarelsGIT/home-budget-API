@@ -4,12 +4,12 @@
     <form (ngSubmit)="onSave()">
 
       <label>User:</label>
-      <select [(ngModel)]="transaction.user.id" name="user" required>
-        <option [ngValue]="null">Select a user</option>
-        <option *ngFor="let user of users" [value]="user.id">
-          {{ user.username }}
-        </option>
-      </select>
+      <app-user-dropdown
+        [styleType]="'form'"
+        [placeholder]="'Select user'"
+        [selectedUser]="transaction.user?.id"
+        (selectedUserChange)="onUserChange($event)">
+      </app-user-dropdown>
 
       <label>Category:</label>
       <app-category-dropdown

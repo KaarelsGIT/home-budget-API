@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import { NgIf} from '@angular/common';
 import {User} from '../../../models/user';
 import {UserService} from '../../../services/user.service';
 import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
+import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 
 @Component({
   selector: 'app-transaction-update-form',
@@ -11,8 +12,8 @@ import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.
   imports: [
     FormsModule,
     NgIf,
-    NgForOf,
-    CategoryDropdownComponent
+    CategoryDropdownComponent,
+    UserDropdownComponent
   ],
   templateUrl: './transaction-update-form.component.html',
   styleUrl: './transaction-update-form.component.css'
@@ -52,6 +53,16 @@ export class TransactionUpdateFormComponent implements OnChanges, OnInit {
       this.transaction.category.id = parsedId;
     } else {
       this.transaction.category = { id: parsedId };
+    }
+  }
+
+  onUserChange(userId: string | number | null) {
+    const parsedId = userId !== null ? Number(userId) : null;
+
+    if (this.transaction.user) {
+      this.transaction.user.id = parsedId;
+    } else {
+      this.transaction.user = { id: parsedId };
     }
   }
 
