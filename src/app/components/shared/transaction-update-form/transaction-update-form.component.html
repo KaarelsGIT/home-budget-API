@@ -1,24 +1,51 @@
 <div class="modal-backdrop" *ngIf="isVisible">
   <div class="modal">
-    <h2>Edit Transaction</h2>
+    <h2>Edit {{ type | titlecase }}</h2>
     <form (ngSubmit)="onSave()">
-      <label>User:</label>
-      <input type="text" [value]="transaction?.user?.username" disabled />
 
-      <label>Category:</label>
-      <input type="text" [value]="transaction?.category?.name" disabled />
+      <div class="form-row">
+        <div class="form-group">
+          <label>User:</label>
+          <app-user-dropdown
+            [styleType]="'form'"
+            [placeholder]="'Select user'"
+            [selectedUser]="transaction.user?.id"
+            (selectedUserChange)="onUserChange($event)">
+          </app-user-dropdown>
+        </div>
 
-      <label>Amount:</label>
-      <input type="number" [(ngModel)]="transaction.amount" name="amount" required />
+        <div class="form-group">
+          <label>Category:</label>
+          <app-category-dropdown
+            [type]="type"
+            [asList]="true"
+            [placeholder]="'Select category'"
+            [selectedCategory]="transaction.category?.id"
+            (selectedCategoryChange)="onCategoryIdChange($event)">
+          </app-category-dropdown>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Amount(€):</label>
+          <input type="number" [(ngModel)]="transaction.amount" name="amount" required/>
+        </div>
+
+        <div class="form-group">
+          <label>Date:</label>
+          <input type="date" [(ngModel)]="transaction.date" name="date" required/>
+        </div>
+      </div>
 
       <label>Description:</label>
-      <input type="text" [(ngModel)]="transaction.description" name="description" />
+      <input type="text" [(ngModel)]="transaction.description" name="description"/>
 
       <div class="modal-buttons">
-        <button (click)="onSave()" [disabled]="isLoading">
+        <button type="submit" [disabled]="isLoading">
           {{ isLoading ? 'Saving...' : 'Save' }}
         </button>
-        <button (click)="onClose()" [disabled]="isLoading">Cancel</button>
+        <button type="button" (click)="onClose()" [disabled]="isLoading">Cancel</button>
       </div>
 
     </form>
