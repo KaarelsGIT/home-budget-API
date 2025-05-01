@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import { NgIf} from '@angular/common';
+import {NgIf, TitleCasePipe} from '@angular/common';
 import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
 import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 
@@ -11,7 +11,8 @@ import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
     FormsModule,
     NgIf,
     CategoryDropdownComponent,
-    UserDropdownComponent
+    UserDropdownComponent,
+    TitleCasePipe
   ],
   templateUrl: './transaction-update-form.component.html',
   styleUrl: './transaction-update-form.component.css'
