@@ -1,8 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { NgIf} from '@angular/common';
-import {User} from '../../../models/user';
-import {UserService} from '../../../services/user.service';
 import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
 import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 
@@ -18,32 +16,19 @@ import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
   templateUrl: './transaction-update-form.component.html',
   styleUrl: './transaction-update-form.component.css'
 })
-export class TransactionUpdateFormComponent implements OnChanges, OnInit {
+export class TransactionUpdateFormComponent implements OnChanges {
   @Input() type!: 'income' | 'expense';
   @Input() transaction: any;
   @Input() isVisible = false;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
-  users: User[] = [];
   isLoading = false;
-
-  constructor(private userService: UserService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
       this.isLoading = false;
     }
-  }
-
-  ngOnInit() {
-    this.loadUsers();
-  }
-
-  loadUsers() {
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
-    });
   }
 
   onCategoryIdChange(categoryId: string | number | null) {
