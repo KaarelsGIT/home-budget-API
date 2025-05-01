@@ -1,3 +1,10 @@
+h1 {
+  color: forestgreen;
+  font-size: 45px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .container-header {
   display: flex;
   justify-content: space-between;
