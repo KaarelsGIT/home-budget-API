@@ -12,6 +12,10 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
+  addCategory(category: Category):Observable<any> {
+    return this.http.post<any>(`${this.url}/add`, category);
+  }
+
   getCategoriesByType(type: 'income' | 'expense', asList: boolean = false): Observable<Category[]> {
     console.log(type);
     console.log(asList);

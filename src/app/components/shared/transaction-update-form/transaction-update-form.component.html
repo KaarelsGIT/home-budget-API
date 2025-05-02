@@ -19,6 +19,7 @@
           <app-category-dropdown
             [type]="type"
             [asList]="true"
+            [allowAddCategory] = true
             [placeholder]="'Select category'"
             [selectedCategory]="transaction.category?.id"
             (selectedCategoryChange)="onCategoryIdChange($event)">

@@ -18,6 +18,7 @@
         <app-category-dropdown
           [type]="type"
           [asList]="true"
+          [allowAddCategory] = true
           [placeholder]="'Choose Category'"
           (selectedCategoryChange)="onCategoryChange($event)">
         </app-category-dropdown>

@@ -1,7 +1,10 @@
-<!-- FILTER -->
+<!-- LIST -->
 <div>
   <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
     <option [value]="null" disabled selected>{{ placeholder }}</option>
+    <option *ngIf="allowAddCategory" [value]="'__add__'">
+      ➕ Add Category
+    </option>
     <option *ngFor="let category of categories" [value]="category.id">
       {{ category.name }}
     </option>
