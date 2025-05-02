@@ -29,17 +29,31 @@
       <div class="form-row">
         <div class="form-group">
           <label>Amount(€):</label>
-          <input type="number" [(ngModel)]="transaction.amount" name="amount" required/>
+          <input
+            type="number"
+            [(ngModel)]="transaction.amount"
+            name="amount"
+            required
+          >
         </div>
 
         <div class="form-group">
           <label>Date:</label>
-          <input type="date" [(ngModel)]="transaction.date" name="date" required/>
+          <input
+            type="date"
+            [(ngModel)]="transaction.date"
+            name="date"
+            required
+          >
         </div>
       </div>
 
       <label>Description:</label>
-      <input type="text" [(ngModel)]="transaction.description" name="description"/>
+      <input
+        type="text"
+        [(ngModel)]="transaction.description"
+        name="description"
+      >
 
       <div class="modal-buttons">
         <button type="submit" [disabled]="isLoading">
