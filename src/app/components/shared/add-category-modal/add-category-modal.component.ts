@@ -2,22 +2,29 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CategoryService} from '../../../services/category.service';
 import {Category} from '../../../models/category';
 import {FormsModule} from '@angular/forms';
+import {NgIf, TitleCasePipe} from '@angular/common';
+import {CategoryType} from '../../../models/category-type';
 
 @Component({
   selector: 'app-add-category-modal',
+  standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf,
+    TitleCasePipe
   ],
   templateUrl: './add-category-modal.component.html',
-  styleUrl: './add-category-modal.component.css'
+  styleUrls: ['./add-category-modal.component.css']
 })
 export class AddCategoryModalComponent {
+  @Input() isVisible = false;
+  @Input() type: 'income' | 'expense' = 'income';
   @Output() categoryAdded = new EventEmitter<Category>();
   @Output() closeModal = new EventEmitter<void>();
 
   categoryName: string = '';
   categoryDescription: string = '';
-  categoryType: 'income' | 'expense' = 'income';
+  recurringPayment: boolean = false;
 
   constructor(private categoryService: CategoryService) {}
 
@@ -27,37 +34,32 @@ export class AddCategoryModalComponent {
       return;
     }
 
-    this.categoryService.getCategoriesByType(this.categoryType, true).subscribe(categories => {
-      const exists = categories.some(category => category.name === this.categoryName);
+    // Create category object matching exactly what works in Postman
+    const newCategory = {
+      name: this.categoryName,
+      type: this.type.toUpperCase(),
+      description: this.categoryDescription
+    };
 
-      if (exists) {
-        alert('Category already exists!');
-        return;
+    console.log('Sending category data:', newCategory); // Debug log
+
+    this.categoryService.addCategory(newCategory).subscribe({
+      next: (category) => {
+        alert('Category added successfully!');
+        this.categoryAdded.emit(category);
+        this.close();
+      },
+      error: (err) => {
+        console.error('Error adding category:', err);
+        alert(`Failed to add category: ${err.error?.message || 'Unknown error'}`);
       }
-
-      const newCategory: Category = {
-        id: 0,
-        name: this.categoryName,
-        description: this.categoryDescription,
-        type: this.categoryType,
-        recurringPayment: false
-      };
-
-      this.categoryService.addCategory(newCategory).subscribe({
-        next: (category) => {
-          alert('Category added successfully!');
-          this.categoryAdded.emit(category);
-          this.closeModal.emit();
-        },
-        error: (err) => {
-          console.error('Error adding category:', err);
-          alert('Failed to add category.');
-        }
-      });
     });
   }
 
   close() {
+    this.categoryName = '';
+    this.categoryDescription = '';
+    this.recurringPayment = false;
     this.closeModal.emit();
   }
 }

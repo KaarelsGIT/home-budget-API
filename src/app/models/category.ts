@@ -1,7 +1,10 @@
+import {CategoryType} from './category-type';
+
 export interface Category {
   id: number;
   name: string;
-  type: String;
+  type: CategoryType;
   description: string;
   recurringPayment: boolean;
+
 }

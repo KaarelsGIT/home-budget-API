@@ -1,40 +1,50 @@
-<div class="modal-backdrop">
-  <div class="modal">
-    <h2>Add Category</h2>
-    <form (ngSubmit)="addCategory()">
-      <div class="form-group">
-        <label for="categoryName">Category Name:</label>
-        <input
-          id="categoryName"
-          [(ngModel)]="categoryName"
-          name="categoryName"
-          required
-          placeholder="Enter category name"
-        >
-      </div>
+<!-- add-category-modal.component.html -->
+<div class="modal-overlay" *ngIf="isVisible" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Add New {{ type | titlecase }} Category</h2>
+      <button class="close-button" (click)="close()">×</button>
+    </div>
 
-      <div class="form-group">
-        <label for="categoryDescription">Description:</label>
-        <input
-          id="categoryDescription"
-          [(ngModel)]="categoryDescription"
-          name="categoryDescription"
-          placeholder="Enter description"
-        >
-      </div>
+    <div class="modal-body">
+      <form (ngSubmit)="addCategory()">
+        <div class="form-group">
+          <label for="categoryName">Category Name:</label>
+          <input
+            id="categoryName"
+            type="text"
+            [(ngModel)]="categoryName"
+            name="categoryName"
+            required
+          >
+        </div>
 
-      <div class="form-group">
-        <label for="categoryType">Category Type:</label>
-        <select [(ngModel)]="categoryType" name="categoryType">
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="categoryDescription">Description:</label>
+          <textarea
+            id="categoryDescription"
+            [(ngModel)]="categoryDescription"
+            name="categoryDescription"
+            rows="3"
+          ></textarea>
+        </div>
 
-      <div class="modal-buttons">
-        <button type="submit">Add Category</button>
-        <button type="button" (click)="close()">Cancel</button>
-      </div>
-    </form>
+        <div class="form-group checkbox">
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="recurringPayment"
+              name="recurringPayment"
+            >
+            Recurring Payment
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="secondary" (click)="close()">Cancel</button>
+          <button type="submit" class="primary">Add Category</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
