@@ -20,15 +20,15 @@
 
         <div class="form-group">
           <label for="categoryDescription">Description:</label>
-          <textarea
+          <input
             id="categoryDescription"
+            type="text"
             [(ngModel)]="categoryDescription"
             name="categoryDescription"
-            rows="3"
-          ></textarea>
+          >
         </div>
 
-        <div class="form-group checkbox">
+        <div *ngIf="type === 'expense'" class="form-group checkbox">
           <label>
             <input
               type="checkbox"

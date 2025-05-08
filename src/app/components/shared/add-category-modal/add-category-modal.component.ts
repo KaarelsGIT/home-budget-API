@@ -34,11 +34,11 @@ export class AddCategoryModalComponent {
       return;
     }
 
-    // Create category object matching exactly what works in Postman
     const newCategory = {
       name: this.categoryName,
       type: this.type.toUpperCase(),
-      description: this.categoryDescription
+      description: this.categoryDescription,
+      recurringPayment: this.recurringPayment,
     };
 
     console.log('Sending category data:', newCategory); // Debug log
