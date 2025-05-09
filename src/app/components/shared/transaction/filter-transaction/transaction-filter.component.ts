@@ -2,8 +2,8 @@ import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {MonthDropdownComponent} from '../month-dropdown/month-dropdown.component';
-import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
-import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
+import {UserDropdownComponent} from '../../user/user-dropdown/user-dropdown.component';
+import {CategoryDropdownComponent} from '../../category/category-dropdown/category-dropdown.component';
 
 @Component({
   selector: 'app-filter-transaction',

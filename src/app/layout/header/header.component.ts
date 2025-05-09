@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {UserDropdownComponent} from '../../components/shared/user-dropdown/user-dropdown.component';
+import {UserDropdownComponent} from '../../components/shared/user/user-dropdown/user-dropdown.component';
 import {User} from '../../models/user';
 import {UserService} from '../../services/user.service';
 

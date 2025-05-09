@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {TransactionTableComponent} from "../../shared/transaction-table/transaction-table.component";
+import {TransactionTableComponent} from "../../shared/transaction/transaction-table/transaction-table.component";
 
 @Component({
   selector: 'app-incomes',

@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgIf, TitleCasePipe} from '@angular/common';
-import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
-import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
+import {CategoryDropdownComponent} from '../../category/category-dropdown/category-dropdown.component';
+import {UserDropdownComponent} from '../../user/user-dropdown/user-dropdown.component';
 
 @Component({
   selector: 'app-update-transaction-modal',

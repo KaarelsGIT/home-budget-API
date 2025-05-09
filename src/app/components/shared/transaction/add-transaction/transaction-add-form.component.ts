@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TransactionService} from '../../../services/transaction.service';
+import {TransactionService} from '../../../../services/transaction.service';
 import {FormsModule} from '@angular/forms';
 import {TitleCasePipe} from '@angular/common';
-import {UserService} from '../../../services/user.service';
-import {User} from "../../../models/user";
-import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
-import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
-import {CategoryService} from '../../../services/category.service';
-import {Category} from '../../../models/category';
+import {UserService} from '../../../../services/user.service';
+import {User} from "../../../../models/user";
+import {UserDropdownComponent} from '../../user/user-dropdown/user-dropdown.component';
+import {CategoryDropdownComponent} from '../../category/category-dropdown/category-dropdown.component';
+import {CategoryService} from '../../../../services/category.service';
+import {Category} from '../../../../models/category';
 
 @Component({
   selector: 'app-add-transaction',
