@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {Category} from '../models/category';
 
@@ -9,8 +9,15 @@ import {Category} from '../models/category';
 })
 export class CategoryService {
   private url = environment.apiURL + '/categories';
+  categoryRefreshSubject = new BehaviorSubject<boolean>(false);
+  categoryRefresh$ = this.categoryRefreshSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  refreshCategories() {
+    this.categoryRefreshSubject.next(true);
+  }
+
 
   addCategory(categoryData: { name: string; type: string; description: string }): Observable<Category> {
     console.log('Sending to backend:', categoryData); // Debug log

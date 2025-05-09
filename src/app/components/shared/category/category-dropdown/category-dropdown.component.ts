@@ -35,6 +35,11 @@ export class CategoryDropdownComponent implements OnInit {
   ngOnInit(): void {
     this.fetchCategories();
     this.lastValidSelection = this.selectedCategory;
+
+    this.categoryService.categoryRefresh$.subscribe(() => {
+      this.fetchCategories();
+    });
+
   }
 
   fetchCategories(): void {
@@ -54,7 +59,7 @@ export class CategoryDropdownComponent implements OnInit {
   }
 
   onAddCategory(category: Category) {
-    this.fetchCategories();
+    this.categoryService.refreshCategories();
     this.selectedCategory = category.id;
     this.lastValidSelection = category.id;
     this.selectedCategoryChange.emit(category.id);
