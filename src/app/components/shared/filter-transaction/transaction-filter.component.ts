@@ -6,7 +6,7 @@ import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.component';
 
 @Component({
-  selector: 'app-transaction-filter',
+  selector: 'app-filter-transaction',
   standalone: true,
   imports: [
     FormsModule,

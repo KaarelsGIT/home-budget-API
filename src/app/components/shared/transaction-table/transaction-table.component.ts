@@ -2,9 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../services/transaction.service';
-import {TransactionAddFormComponent} from '../transaction-add-form/transaction-add-form.component';
-import {TransactionFilterComponent} from '../transaction-filter/transaction-filter.component';
-import {TransactionUpdateFormComponent} from '../transaction-update-form/transaction-update-form.component';
+import {TransactionAddFormComponent} from '../add-transaction/transaction-add-form.component';
+import {TransactionFilterComponent} from '../filter-transaction/transaction-filter.component';
+import {TransactionUpdateFormComponent} from '../update-transaction-modal/transaction-update-form.component';
 
 @Component({
   selector: 'app-transaction-table',

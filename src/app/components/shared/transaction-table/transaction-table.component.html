@@ -10,19 +10,19 @@
 
   <!-- ADD FORM -->
   <div *ngIf="isFormVisible">
-    <app-transaction-add-form
+    <app-add-transaction
       [type]="type"
       (transactionAdded)="refreshTable()">
-    </app-transaction-add-form>
+    </app-add-transaction>
   </div>
 
   <!-- 🔍 FILTERS FORM -->
-  <app-transaction-filter
+  <app-filter-transaction
     [filters]="filters"
     [years]="years"
     [type]="type"
     (filtersChange)="applyFilters()">
-  </app-transaction-filter>
+  </app-filter-transaction>
 
   <!-- 📊 TABLE -->
   <div class="table-container">
@@ -84,7 +84,10 @@
 
       <tr *ngIf="selectedTransactionId !== null">
         <td colspan="7">
-          <app-transaction-update-form [transaction]="getSelectedTransaction()"></app-transaction-update-form>
+          <app-update-transaction-modal
+            [transaction]="getSelectedTransaction()"
+          >
+          </app-update-transaction-modal>
         </td>
       </tr>
       </tbody>
@@ -106,10 +109,10 @@
 </div>
 
 <!-- MODAL for Editing -->
-<app-transaction-update-form
+<app-update-transaction-modal
   [type]="type"
   [transaction]="editedTransaction"
   [isVisible]="isModalVisible"
   (close)="closeModal()"
   (save)="onSave($event)">
-</app-transaction-update-form>
+</app-update-transaction-modal>

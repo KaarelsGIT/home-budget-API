@@ -5,7 +5,7 @@ import {CategoryDropdownComponent} from '../category-dropdown/category-dropdown.
 import {UserDropdownComponent} from '../user-dropdown/user-dropdown.component';
 
 @Component({
-  selector: 'app-transaction-update-form',
+  selector: 'app-update-transaction-modal',
   standalone: true,
   imports: [
     FormsModule,
