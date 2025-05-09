@@ -57,10 +57,19 @@
       >
 
       <div class="modal-buttons">
-        <button type="submit" [disabled]="isLoading">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="isLoading"
+        >
           {{ isLoading ? 'Saving...' : 'Save' }}
         </button>
-        <button type="button" (click)="onClose()" [disabled]="isLoading">Cancel</button>
       </div>
 
     </form>

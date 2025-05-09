@@ -100,21 +100,21 @@ label {
 }
 
 .modal-buttons button:first-child {
-  background-color: forestgreen;
-  color: white;
-}
-
-.modal-buttons button:first-child:hover {
-  background-color: darkgreen;
-}
-
-.modal-buttons button:last-child {
   background-color: red;
   color: white;
 }
 
-.modal-buttons button:last-child:hover {
+.modal-buttons button:first-child:hover {
   background-color: darkred;
+}
+
+.modal-buttons button:last-child {
+  background-color: forestgreen;
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: darkgreen;
 }
 
 /* Responsive adjustments */
