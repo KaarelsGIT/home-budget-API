@@ -16,8 +16,7 @@
     </option>
 
     <option
-      *ngFor="let
-      category of categories"
+      *ngFor="let category of categories"
       [value]="category.id">
       {{ category.name }}
     </option>
@@ -29,5 +28,5 @@
   [type]="type"
   [isInModal]="isInModal"
   (categoryAdded)="onAddCategory($event)"
-  (closeModal)="showAddModal = false">
+  (closeModal)="onModalClose()">
 </app-add-category-modal>

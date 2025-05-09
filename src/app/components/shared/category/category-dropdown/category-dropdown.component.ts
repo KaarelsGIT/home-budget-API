@@ -28,11 +28,13 @@ export class CategoryDropdownComponent implements OnInit {
 
   categories: Category[] = [];
   showAddModal = false;
+  lastValidSelection: string | number | null = null;
 
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     this.fetchCategories();
+    this.lastValidSelection = this.selectedCategory;
   }
 
   fetchCategories(): void {
@@ -44,17 +46,23 @@ export class CategoryDropdownComponent implements OnInit {
   onCategoryChange(): void {
     if (this.selectedCategory === '__add__') {
       this.showAddModal = true;
-      // Reset the selection to prevent the "__add__" option from staying selected
-      this.selectedCategory = null;
     } else {
+      this.lastValidSelection = this.selectedCategory;
       this.selectedCategoryChange.emit(this.selectedCategory);
     }
+
   }
 
   onAddCategory(category: Category) {
-    this.fetchCategories(); // Refresh the categories list
+    this.fetchCategories();
     this.selectedCategory = category.id;
-    this.selectedCategoryChange.emit(this.selectedCategory);
+    this.lastValidSelection = category.id;
+    this.selectedCategoryChange.emit(category.id);
     this.showAddModal = false;
+  }
+
+  onModalClose() {
+    this.showAddModal = false;
+    this.selectedCategory = this.lastValidSelection;
   }
 }
