@@ -23,6 +23,7 @@ export class CategoryDropdownComponent implements OnInit {
   @Input() asList: boolean = false;
   @Input() allowAddCategory: boolean = false;
   @Input() selectedCategory: string | number | null = null;
+  @Input() isInModal: boolean = false;
   @Output() selectedCategoryChange = new EventEmitter<string | number | null>();
 
   categories: Category[] = [];

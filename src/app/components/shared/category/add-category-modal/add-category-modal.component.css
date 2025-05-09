@@ -12,6 +12,11 @@
   z-index: 1100;
 }
 
+.modal-overlay.from-modal {
+  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.3);
+}
+
 .modal-content {
   background: #ffffff;
   padding: 25px;

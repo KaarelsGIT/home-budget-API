@@ -27,6 +27,7 @@
 <app-add-category-modal
   [isVisible]="showAddModal"
   [type]="type"
+  [isInModal]="isInModal"
   (categoryAdded)="onAddCategory($event)"
   (closeModal)="showAddModal = false">
 </app-add-category-modal>

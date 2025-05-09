@@ -1,5 +1,6 @@
 <div
   class="modal-overlay"
+  [class.from-modal]="isInModal"
   *ngIf="isVisible"
   (click)="close()"
 >

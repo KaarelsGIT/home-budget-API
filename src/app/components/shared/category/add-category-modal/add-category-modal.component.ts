@@ -18,6 +18,7 @@ import {NgIf, TitleCasePipe} from '@angular/common';
 export class AddCategoryModalComponent {
   @Input() isVisible = false;
   @Input() type: 'income' | 'expense' = 'income';
+  @Input() isInModal = false;
   @Output() categoryAdded = new EventEmitter<Category>();
   @Output() closeModal = new EventEmitter<void>();
 
