@@ -1,4 +1,3 @@
-/* General form container */
 .form-container {
   margin: 30px auto;
   padding: 25px;
@@ -9,7 +8,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Title styling */
 .form-container h2 {
   color: forestgreen;
   font-size: 26px;
@@ -17,14 +15,12 @@
   margin-bottom: 20px;
 }
 
-/* Form layout */
 form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* Form row for side-by-side inputs */
 .form-row {
   display: flex;
   gap: 15px;
@@ -34,7 +30,6 @@ form {
   flex: 1;
 }
 
-/* Form group layout */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -47,7 +42,6 @@ label {
   color: #333;
 }
 
-/* Input and dropdown styling */
 input,
 select {
   padding: 10px;
@@ -65,7 +59,6 @@ select:focus {
   outline: none;
 }
 
-/* Button styling */
 button {
   padding: 12px 20px;
   background: forestgreen;
@@ -82,7 +75,6 @@ button:hover {
   background: darkgreen;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;

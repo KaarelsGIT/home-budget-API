@@ -1,6 +1,12 @@
-<!-- add-category-modal.component.html -->
-<div class="modal-overlay" *ngIf="isVisible" (click)="close()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div
+  class="modal-overlay"
+  *ngIf="isVisible"
+  (click)="close()"
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+  >
     <div class="modal-header">
       <h2>Add New {{ type | titlecase }} Category</h2>
     </div>
@@ -33,15 +39,23 @@
             <input
               type="checkbox"
               [(ngModel)]="recurringPayment"
-              name="recurringPayment"
-            >
+              name="recurringPayment">
             Recurring Payment
           </label>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="secondary" (click)="close()">Cancel</button>
-          <button type="submit" class="primary">Add Category</button>
+          <button
+            type="button"
+            class="secondary"
+            (click)="close()">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="primary">
+            Add Category
+          </button>
         </div>
       </form>
     </div>

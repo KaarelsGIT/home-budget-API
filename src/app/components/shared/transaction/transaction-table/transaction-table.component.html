@@ -4,8 +4,19 @@
     <h1 *ngIf="type === 'expense'">Expenses</h1>
 
     <!-- ADD BUTTON -->
-    <button class="add-button" *ngIf="!isFormVisible" (click)="toggleForm()">Add</button>
-    <button class="close-button" *ngIf="isFormVisible" (click)="toggleForm()">Close</button>
+    <button
+      class="add-button"
+      *ngIf="!isFormVisible"
+      (click)="toggleForm()">
+      Add
+    </button>
+
+    <button
+      class="close-button"
+      *ngIf="isFormVisible"
+      (click)="toggleForm()">
+      Close
+    </button>
   </div>
 
   <!-- ADD FORM -->
@@ -96,9 +107,18 @@
 
   <!-- 📌 PAGINATION -->
   <div class="pagination">
-    <button (click)="changePage(-1)" [disabled]="filters.page === 0">Back</button>
-    <span>Page {{ filters.page + 1 }}</span>
-    <button (click)="changePage(1)">Next</button>
+    <button
+      (click)="changePage(-1)"
+      [disabled]="filters.page === 0">
+      Back
+    </button>
+    <span>
+      Page {{ filters.page + 1 }}
+    </span>
+    <button
+      (click)="changePage(1)">
+      Next
+    </button>
   </div>
 
   <!-- 📊 SUMMARY -->

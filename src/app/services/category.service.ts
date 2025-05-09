@@ -20,8 +20,6 @@ export class CategoryService {
       );
   }
 
-
-
   getCategoriesByType(type: 'income' | 'expense', asList: boolean = false): Observable<Category[]> {
     const upperType = type.toUpperCase();
     return this.http.get<any>(`${this.url}/all?type=${upperType}&asList=${asList}`).pipe(
@@ -35,14 +33,12 @@ export class CategoryService {
     );
   }
 
-
   getCategoryById(id: string | number): Observable<Category> {
     return this.http.get<Category>(`${this.url}/${id}`)
       .pipe(
         catchError(this.handleError)
       );
   }
-
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error);

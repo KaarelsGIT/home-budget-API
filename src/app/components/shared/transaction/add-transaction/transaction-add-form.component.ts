@@ -67,7 +67,6 @@ export class TransactionAddFormComponent implements OnInit {
       });
   }
 
-
   addTransaction(): void {
     if (!this.transaction.amount || !this.transaction.date) {
       alert('Amount and Date are required!');

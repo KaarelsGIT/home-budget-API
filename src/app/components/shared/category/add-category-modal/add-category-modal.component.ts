@@ -3,7 +3,6 @@ import {CategoryService} from '../../../../services/category.service';
 import {Category} from '../../../../models/category';
 import {FormsModule} from '@angular/forms';
 import {NgIf, TitleCasePipe} from '@angular/common';
-import {CategoryType} from '../../../../models/category-type';
 
 @Component({
   selector: 'app-add-category-modal',
