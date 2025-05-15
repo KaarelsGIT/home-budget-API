@@ -26,12 +26,6 @@ export class TransactionAddFormComponent implements OnInit {
   @Input() activeUser: User | null = null;
   @Output() transactionAdded = new EventEmitter<void>();
 
-  ngOnInit(): void {
-    if (this.activeUser) {
-      this.transaction.user = this.activeUser;
-    }
-  }
-
   constructor(private transactionService: TransactionService,
               private userService: UserService,
               private categoryService: CategoryService) {
@@ -44,6 +38,12 @@ export class TransactionAddFormComponent implements OnInit {
     date: '',
     description: ''
   };
+
+  ngOnInit(): void {
+    if (this.activeUser) {
+      this.transaction.user = this.activeUser;
+    }
+  }
 
   onUserChange(userId: string | number | null): void {
     if (userId === null) {
