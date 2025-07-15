@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
@@ -10,6 +10,9 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./calculator.component.css']
 })
 export class CalculatorComponent {
+  @Input() isVisible = false;
+  @Output() closeCalculator = new EventEmitter<void>();
+
   display: string = '0';
   firstOperand: number | null = null;
   operator: string | null = null;
@@ -25,6 +28,11 @@ export class CalculatorComponent {
   }
 
   appendOperator(op: string): void {
+    if (op === '%') {
+      this.calculatePercentage();
+      return;
+    }
+
     if (this.firstOperand === null) {
       this.firstOperand = parseFloat(this.display);
     } else if (this.operator) {
@@ -34,6 +42,37 @@ export class CalculatorComponent {
     }
     this.operator = op;
     this.waitingForSecondOperand = true;
+  }
+
+  calculatePercentage(): void {
+    const currentValue = parseFloat(this.display);
+    if (this.firstOperand === null) {
+      this.display = String(currentValue / 100);
+    } else if (this.operator) {
+      let result: number;
+      const percentage = (this.firstOperand * currentValue) / 100;
+
+      switch (this.operator) {
+        case '+':
+          result = this.firstOperand + percentage;
+          break;
+        case '-':
+          result = this.firstOperand - percentage;
+          break;
+        case '*':
+          result = percentage;
+          break;
+        case '/':
+          result = this.firstOperand / (currentValue / 100);
+          break;
+        default:
+          result = percentage;
+      }
+      this.display = String(result);
+      this.firstOperand = null;
+      this.operator = null;
+      this.waitingForSecondOperand = false;
+    }
   }
 
   calculate(): number {
@@ -53,9 +92,6 @@ export class CalculatorComponent {
           break;
         case '/':
           result = this.firstOperand / secondOperand;
-          break;
-        case '%':
-          result = this.firstOperand % secondOperand;
           break;
       }
       this.display = String(result);
@@ -79,5 +115,9 @@ export class CalculatorComponent {
     } else {
       this.display = '0';
     }
+  }
+
+  close(): void {
+    this.closeCalculator.emit();
   }
 }
