@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
@@ -18,18 +18,56 @@ export class CalculatorComponent {
   operator: string | null = null;
   waitingForSecondOperand: boolean = false;
 
-  appendNumber(num: string): void {
-  if (this.waitingForSecondOperand) {
-    this.display = num === '.' ? '0.' : num;
-    this.waitingForSecondOperand = false;
-  } else {
-    if (num === '.' && !this.display.includes('.')) {
-      this.display = this.display + num;
-    } else if (num !== '.') {
-      this.display = this.display === '0' ? (num === '.' ? '0.' : num) : this.display + num;
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.isVisible) return;
+
+    event.preventDefault();
+
+    const key = event.key;
+
+    if (/^[0-9.]$/.test(key)) {
+      this.appendNumber(key);
+      return;
+    }
+
+    switch (key) {
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+      case '%':
+        this.appendOperator(key);
+        break;
+      case 'Enter':
+      case '=':
+        this.calculate();
+        break;
+      case 'Backspace':
+        this.delete();
+        break;
+      case 'Escape':
+        this.close();
+        break;
+      case 'c':
+      case 'C':
+        this.clear();
+        break;
     }
   }
-}
+
+  appendNumber(num: string): void {
+    if (this.waitingForSecondOperand) {
+      this.display = num === '.' ? '0.' : num;
+      this.waitingForSecondOperand = false;
+    } else {
+      if (num === '.' && !this.display.includes('.')) {
+        this.display = this.display + num;
+      } else if (num !== '.') {
+        this.display = this.display === '0' ? (num === '.' ? '0.' : num) : this.display + num;
+      }
+    }
+  }
 
   appendOperator(op: string): void {
     if (op === '%') {
