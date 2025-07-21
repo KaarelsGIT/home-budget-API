@@ -7,8 +7,7 @@ import { NgIf } from '@angular/common';
   selector: 'app-expenses',
   standalone: true,
   imports: [
-    TransactionTableComponent,
-    CalculatorComponent
+    TransactionTableComponent
   ],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css'
