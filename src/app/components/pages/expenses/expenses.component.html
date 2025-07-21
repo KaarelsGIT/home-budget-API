@@ -1,12 +1,5 @@
 <div class="expenses-container">
   <div class="main-content">
     <app-transaction-table [type]="'expense'"></app-transaction-table>
-    <button class="calculator-button" (click)="toggleCalculator()">
-      Open Calculator
-    </button>
   </div>
-  <app-calculator
-    [isVisible]="isCalculatorVisible"
-    (closeCalculator)="isCalculatorVisible = false">
-  </app-calculator>
 </div>

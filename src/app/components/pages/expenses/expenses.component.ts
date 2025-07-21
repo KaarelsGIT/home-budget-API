@@ -14,9 +14,4 @@ import { NgIf } from '@angular/common';
   styleUrl: './expenses.component.css'
 })
 export class ExpensesComponent {
-  isCalculatorVisible = false;
-
-  toggleCalculator() {
-    this.isCalculatorVisible = !this.isCalculatorVisible;
-  }
 }
