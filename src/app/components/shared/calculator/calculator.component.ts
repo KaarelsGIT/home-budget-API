@@ -19,13 +19,17 @@ export class CalculatorComponent {
   waitingForSecondOperand: boolean = false;
 
   appendNumber(num: string): void {
-    if (this.waitingForSecondOperand) {
-      this.display = num;
-      this.waitingForSecondOperand = false;
-    } else {
-      this.display = this.display === '0' ? num : this.display + num;
+  if (this.waitingForSecondOperand) {
+    this.display = num === '.' ? '0.' : num;
+    this.waitingForSecondOperand = false;
+  } else {
+    if (num === '.' && !this.display.includes('.')) {
+      this.display = this.display + num;
+    } else if (num !== '.') {
+      this.display = this.display === '0' ? (num === '.' ? '0.' : num) : this.display + num;
     }
   }
+}
 
   appendOperator(op: string): void {
     if (op === '%') {
