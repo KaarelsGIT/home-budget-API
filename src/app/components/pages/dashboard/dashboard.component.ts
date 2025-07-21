@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit {
         responsive: true,
         plugins: {
           legend: {
-            position: 'right'
+            display: false  // This will hide the legend
           }
         }
       }
