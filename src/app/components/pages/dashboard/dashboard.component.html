@@ -7,11 +7,17 @@
     <div class="dashboard-card income">
       <h2>Total Income</h2>
       <p class="amount">€{{ totalIncome | number:'1.2-2' }}</p>
+      <p class="comparison" [class.positive]="yearToDateComparison.currentYear.income > yearToDateComparison.previousYear.income">
+        {{ ((yearToDateComparison.currentYear.income - yearToDateComparison.previousYear.income) / yearToDateComparison.previousYear.income * 100) | number:'1.0-1' }}% vs last year
+      </p>
     </div>
 
     <div class="dashboard-card expenses">
       <h2>Total Expenses</h2>
       <p class="amount">€{{ totalExpense | number:'1.2-2' }}</p>
+      <p class="comparison" [class.positive]="yearToDateComparison.currentYear.expense < yearToDateComparison.previousYear.expense">
+        {{ ((yearToDateComparison.currentYear.expense - yearToDateComparison.previousYear.expense) / yearToDateComparison.previousYear.expense * 100) | number:'1.0-1' }}% vs last year
+      </p>
     </div>
 
     <div class="dashboard-card balance" [ngClass]="{'negative': balance < 0}">
@@ -20,8 +26,51 @@
     </div>
   </div>
 
-  <div class="chart-container">
-    <h2>Monthly Overview</h2>
-    <canvas id="monthlyChart"></canvas>
+  <div class="dashboard-content">
+    <div class="chart-container monthly-chart">
+      <h2>Monthly Overview</h2>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-container category-chart">
+        <h2>Expense Categories</h2>
+        <canvas id="categoryChart"></canvas>
+      </div>
+
+      <div class="recent-transactions-grid">
+        <div class="recent-transactions income-transactions">
+          <div class="section-header">
+            <h2>Recent Income</h2>
+            <div class="actions">
+              <a routerLink="/incomes" class="action-button">Add Income</a>
+            </div>
+          </div>
+          <div class="transactions-list">
+            <div *ngFor="let transaction of recentTransactions" class="transaction-item">
+              <div class="transaction-date">{{ transaction.date | date }}</div>
+              <div class="transaction-category">{{ transaction.category?.name }}</div>
+              <div class="transaction-amount positive">€{{ transaction.amount | number:'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-transactions expense-transactions">
+          <div class="section-header">
+            <h2>Recent Expenses</h2>
+            <div class="actions">
+              <a routerLink="/expenses" class="action-button">Add Expense</a>
+            </div>
+          </div>
+          <div class="transactions-list">
+            <div *ngFor="let transaction of recentTransactions" class="transaction-item">
+              <div class="transaction-date">{{ transaction.date | date }}</div>
+              <div class="transaction-category">{{ transaction.category?.name }}</div>
+              <div class="transaction-amount">€{{ transaction.amount | number:'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
