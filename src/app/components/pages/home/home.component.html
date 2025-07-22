@@ -1,1 +1,112 @@
-<p>home works!</p>
+<div class="financial-summary">
+  <h2>Financial Summary {{currentYear}}</h2>
+
+  <!-- Income Table -->
+  <div class="table-section">
+    <h3>Income Categories</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th *ngFor="let month of months">{{month}}</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of getCategories('income')">
+            <td>{{category}}</td>
+            <td *ngFor="let month of months" [ngClass]="{'zero-amount': !incomeTotals[category].monthlyAmounts[month]}">
+              {{(incomeTotals[category].monthlyAmounts[month] || 0) | number:'1.2-2'}} €
+            </td>
+            <td class="total" [ngClass]="{'zero-amount': !incomeTotals[category].total}">
+              {{(incomeTotals[category].total || 0) | number:'1.2-2'}} €
+            </td>
+          </tr>
+          <tr class="monthly-total">
+            <td><strong>Monthly Total</strong></td>
+            <td *ngFor="let month of months" [ngClass]="{'zero-amount': !monthlyTotals.income[month]}">
+              {{(monthlyTotals.income[month] || 0) | number:'1.2-2'}} €
+            </td>
+            <td class="total" [ngClass]="{'zero-amount': !totalIncome}">
+              <strong>{{(totalIncome || 0) | number:'1.2-2'}} €</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Expense Table -->
+  <div class="table-section">
+    <h3>Expense Categories</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th *ngFor="let month of months">{{month}}</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of getCategories('expense')">
+            <td>{{category}}</td>
+            <td *ngFor="let month of months" [ngClass]="{'zero-amount': !expenseTotals[category].monthlyAmounts[month]}">
+              {{(expenseTotals[category].monthlyAmounts[month] || 0) | number:'1.2-2'}} €
+            </td>
+            <td class="total" [ngClass]="{'zero-amount': !expenseTotals[category].total}">
+              {{(expenseTotals[category].total || 0) | number:'1.2-2'}} €
+            </td>
+          </tr>
+          <tr class="monthly-total">
+            <td><strong>Monthly Total</strong></td>
+            <td *ngFor="let month of months" [ngClass]="{'zero-amount': !monthlyTotals.expense[month]}">
+              {{(monthlyTotals.expense[month] || 0) | number:'1.2-2'}} €
+            </td>
+            <td class="total" [ngClass]="{'zero-amount': !totalExpense}">
+              <strong>{{(totalExpense || 0) | number:'1.2-2'}} €</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Monthly Balance -->
+  <div class="table-section">
+    <h3>Monthly Balance</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Balance</th>
+            <th *ngFor="let month of months">{{month}}</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Net Balance</strong></td>
+            <td *ngFor="let month of months"
+                [ngClass]="{
+                  'positive': monthlyTotals.balance[month] > 0,
+                  'negative': monthlyTotals.balance[month] < 0,
+                  'zero-amount': !monthlyTotals.balance[month]
+                }">
+              {{(monthlyTotals.balance[month] || 0) | number:'1.2-2'}} €
+            </td>
+            <td class="total"
+                [ngClass]="{
+                  'positive': totalBalance > 0,
+                  'negative': totalBalance < 0,
+                  'zero-amount': !totalBalance
+                }">
+              <strong>{{(totalBalance || 0) | number:'1.2-2'}} €</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
