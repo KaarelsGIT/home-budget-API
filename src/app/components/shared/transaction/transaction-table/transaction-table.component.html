@@ -107,23 +107,34 @@
 
   <!-- 📌 PAGINATION -->
   <div class="pagination">
-    <button
-      (click)="changePage(-1)"
-      [disabled]="filters.page === 0">
-      Back
-    </button>
-    <span>
-      Page {{ filters.page + 1 }}
-    </span>
-    <button
-      (click)="changePage(1)">
-      Next
-    </button>
+    <div class="page-size-selector">
+      <label for="pageSize">Rows per page:</label>
+      <select id="pageSize" [(ngModel)]="filters.size" (change)="onPageSizeChange()">
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+        <option [value]="100">100</option>
+      </select>
+    </div>
+    <div class="page-controls">
+      <button
+        (click)="changePage(-1)"
+        [disabled]="filters.page === 0">
+        Back
+      </button>
+      <span>
+        Page {{ filters.page + 1 }}
+      </span>
+      <button
+        (click)="changePage(1)"
+        [disabled]="!hasMorePages">
+        Next
+      </button>
+    </div>
   </div>
 
   <!-- 📊 SUMMARY -->
   <div class="summary">
-    <p>PageAmount: {{ pageTotal }} EUR</p>
     <p>All Total (with filters): {{ allTotal }} EUR</p>
   </div>
 </div>

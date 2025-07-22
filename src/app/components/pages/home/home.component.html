@@ -1,6 +1,43 @@
 <div class="financial-summary">
   <h2>Financial Summary {{currentYear}}</h2>
 
+  <!-- Monthly Balance -->
+  <div class="table-section">
+    <h3>Monthly Balance</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th>Balance</th>
+          <th *ngFor="let month of months">{{month}}</th>
+          <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><strong>Net Balance</strong></td>
+          <td *ngFor="let month of months"
+              [ngClass]="{
+                  'positive': monthlyTotals.balance[month] > 0,
+                  'negative': monthlyTotals.balance[month] < 0,
+                  'zero-amount': !monthlyTotals.balance[month]
+                }">
+            {{(monthlyTotals.balance[month] || 0) | number:'1.2-2'}} €
+          </td>
+          <td class="total"
+              [ngClass]="{
+                  'positive': totalBalance > 0,
+                  'negative': totalBalance < 0,
+                  'zero-amount': !totalBalance
+                }">
+            <strong>{{(totalBalance || 0) | number:'1.2-2'}} €</strong>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Income Table -->
   <div class="table-section">
     <h3>Income Categories</h3>
@@ -66,43 +103,6 @@
             </td>
             <td class="total" [ngClass]="{'zero-amount': !totalExpense}">
               <strong>{{(totalExpense || 0) | number:'1.2-2'}} €</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Monthly Balance -->
-  <div class="table-section">
-    <h3>Monthly Balance</h3>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Balance</th>
-            <th *ngFor="let month of months">{{month}}</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Net Balance</strong></td>
-            <td *ngFor="let month of months"
-                [ngClass]="{
-                  'positive': monthlyTotals.balance[month] > 0,
-                  'negative': monthlyTotals.balance[month] < 0,
-                  'zero-amount': !monthlyTotals.balance[month]
-                }">
-              {{(monthlyTotals.balance[month] || 0) | number:'1.2-2'}} €
-            </td>
-            <td class="total"
-                [ngClass]="{
-                  'positive': totalBalance > 0,
-                  'negative': totalBalance < 0,
-                  'zero-amount': !totalBalance
-                }">
-              <strong>{{(totalBalance || 0) | number:'1.2-2'}} €</strong>
             </td>
           </tr>
         </tbody>

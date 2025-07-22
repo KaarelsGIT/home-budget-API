@@ -6,7 +6,7 @@
   margin-bottom: 40px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
 
@@ -19,7 +19,7 @@ table {
   border-collapse: collapse;
   margin-top: 10px;
   min-width: 1200px;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
 }
 
 th, td {
@@ -34,42 +34,33 @@ th:first-child, td:first-child {
   text-align: left;
   position: sticky;
   left: 0;
-  background-color: #fff;
+  background-color: inherit;
   z-index: 1;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
 
-/* Hover effect for the sticky first column */
-tr:hover td:first-child {
-  background-color: #f0f0f0;
-}
-
 th {
-  background-color: #f5f5f5;
+  background-color: forestgreen !important;
+  color: mintcream;
   font-weight: bold;
-  border-bottom: 2px solid #ddd;
+  font-size: 18px;
+  text-align: center;
 }
 
-/* Row hover effect */
-tbody tr:hover {
-  background-color: #f0f0f0;
-}
-
-/* Keep the monthly total row distinguishable on hover */
+tbody tr:hover,
+tr.total:hover,
 tr.monthly-total:hover {
-  background-color: #eef2f7;
+  background-color: #e8f5e9 !important;
 }
 
 .total {
   font-weight: bold;
-  background-color: #f8f9fa;
   border-left: 2px solid #ddd;
 }
 
 .monthly-total {
-  background-color: #f8f9fa;
-  border-top: 2px solid #ddd;
+  border-top: 2px solid forestgreen;
 }
 
 .zero-amount {
@@ -77,7 +68,7 @@ tr.monthly-total:hover {
 }
 
 .positive {
-  color: #4CAF50 !important;
+  color: forestgreen !important;
   font-weight: bold;
 }
 
@@ -87,11 +78,12 @@ tr.monthly-total:hover {
 }
 
 h2, h3 {
-  color: #333;
+  color: forestgreen;
   margin-bottom: 15px;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 30px;
+  font-size: 45px;
 }

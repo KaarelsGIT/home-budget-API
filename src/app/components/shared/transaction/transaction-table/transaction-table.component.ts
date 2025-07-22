@@ -28,6 +28,9 @@ export class TransactionTableComponent implements OnInit {
   isModalVisible = false;
   selectedTransactionId: number | null = null;
   editedTransaction: any = null;
+  totalElements: number = 0;
+  hasMorePages: boolean = false;
+
 
   transactions: any[] = [];
   years: any[] = [];
@@ -45,6 +48,7 @@ export class TransactionTableComponent implements OnInit {
     page: 0,
     size: 20
   };
+
 
   constructor(private transactionService: TransactionService) {
   }
@@ -92,15 +96,20 @@ export class TransactionTableComponent implements OnInit {
     params.userId = params.userId ? Number(params.userId) : null;
     params.categoryId = params.categoryId ? Number(params.categoryId) : null;
 
-    console.log('Sending filters:', params);
-
     this.transactionService.getTransactions(this.type, params).subscribe(response => {
       this.transactions = response.transactionPage.content;
+      this.totalElements = response.transactionPage.totalElements;
+      this.hasMorePages = (this.filters.page + 1) * this.filters.size < this.totalElements;
       this.pageTotal = response.pageTotal;
       this.allTotal = response.allTotal;
     }, error => {
       console.error('API error:', error);
     });
+  }
+
+  onPageSizeChange(): void {
+    this.filters.page = 0; // Reset to first page when changing page size
+    this.fetchTransactions();
   }
 
   changePage(direction: number): void {
