@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import {map, Observable} from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +17,16 @@ export class TransactionService {
 
   getTransactions(type: 'income' | 'expense', filters: any): Observable<any> {
     let params = new HttpParams();
-    if (filters.userId) params = params.set('userId', filters.userId);
-    if (filters.categoryId) params = params.set('categoryId', filters.categoryId);
+
+    params = params.set('page', String(filters.page ?? 0));
+    params = params.set('size', String(filters.size ?? 20));
+    if (filters.userId !== null && filters.userId !== undefined) params = params.set('userId', filters.userId);
+    if (filters.categoryId !== null && filters.categoryId !== undefined) params = params.set('categoryId', filters.categoryId);
     if (filters.date) params = params.set('date', filters.date);
-    if (filters.year) params = params.set('year', filters.year);
-    if (filters.month) params = params.set('month', filters.month);
+    if (filters.year !== null && filters.year !== undefined) params = params.set('year', filters.year);
+    if (filters.month !== null && filters.month !== undefined) params = params.set('month', filters.month);
     if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
     if (filters.sortOrder) params = params.set('sortOrder', filters.sortOrder);
-    if (filters.page) params = params.set('page', filters.page);
-    if (filters.size) params = params.set('size', filters.size);
 
     const apiUrl = `${this.url}/${type}s/all`;
     return this.http.get<any>(apiUrl, { params });

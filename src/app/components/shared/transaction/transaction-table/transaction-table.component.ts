@@ -98,7 +98,7 @@ export class TransactionTableComponent implements OnInit {
 
     this.transactionService.getTransactions(this.type, params).subscribe(response => {
       this.transactions = response.transactionPage.content;
-      this.totalElements = response.transactionPage.totalElements;
+      this.totalElements = response.transactionPage.page.totalElements;
       this.hasMorePages = (this.filters.page + 1) * this.filters.size < this.totalElements;
       this.pageTotal = response.pageTotal;
       this.allTotal = response.allTotal;
@@ -108,7 +108,7 @@ export class TransactionTableComponent implements OnInit {
   }
 
   onPageSizeChange(): void {
-    this.filters.page = 0; // Reset to first page when changing page size
+    this.filters.page = 0;
     this.fetchTransactions();
   }
 
