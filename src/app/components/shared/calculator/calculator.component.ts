@@ -177,7 +177,7 @@ export class CalculatorComponent {
   dragging = false;
   offsetX = 0;
   offsetY = 0;
-  position = { top: 100, left: 100 }; // Algpositsioon
+  position = { top: 100, left: 100 };
 
   onMouseDown(event: MouseEvent): void {
     this.dragging = true;
