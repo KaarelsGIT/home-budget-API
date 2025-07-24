@@ -1,7 +1,9 @@
 <div class="calculator-modal" *ngIf="isVisible">
   <div class="calculator-backdrop" (click)="close()"></div>
-  <div class="calculator">
-    <div class="calculator-header">
+  <div
+    class="calculator"
+    [ngStyle]="{'top.px': position.top, 'left.px': position.left}">
+    <div class="calculator-header" (mousedown)="onMouseDown($event)">
       <button class="close-button" (click)="close()">×</button>
     </div>
     <div class="display">{{ display }}</div>

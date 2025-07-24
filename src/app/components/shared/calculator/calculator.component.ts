@@ -1,11 +1,11 @@
 import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import {NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-calculator',
   standalone: true,
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule, NgIf, NgStyle],
   templateUrl: './calculator.component.html',
   styleUrls: ['./calculator.component.css']
 })
@@ -161,5 +161,38 @@ export class CalculatorComponent {
 
   close(): void {
     this.closeCalculator.emit();
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  handleMouseMove(event: MouseEvent) {
+    this.onMouseMove(event);
+  }
+
+  @HostListener('document:mouseup')
+  handleMouseUp() {
+    this.onMouseUp();
+  }
+
+
+  dragging = false;
+  offsetX = 0;
+  offsetY = 0;
+  position = { top: 100, left: 100 }; // Algpositsioon
+
+  onMouseDown(event: MouseEvent): void {
+    this.dragging = true;
+    this.offsetX = event.clientX - this.position.left;
+    this.offsetY = event.clientY - this.position.top;
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (this.dragging) {
+      this.position.left = event.clientX - this.offsetX;
+      this.position.top = event.clientY - this.offsetY;
+    }
+  }
+
+  onMouseUp(): void {
+    this.dragging = false;
   }
 }
