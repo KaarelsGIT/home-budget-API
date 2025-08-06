@@ -14,6 +14,7 @@ export class CalculatorComponent {
   @Output() closeCalculator = new EventEmitter<void>();
 
   display: string = '0';
+  expression: string = '';
   firstOperand: number | null = null;
   operator: string | null = null;
   waitingForSecondOperand: boolean = false;
@@ -59,6 +60,7 @@ export class CalculatorComponent {
   appendNumber(num: string): void {
     if (this.waitingForSecondOperand) {
       this.display = num === '.' ? '0.' : num;
+      this.expression += this.display;
       this.waitingForSecondOperand = false;
     } else {
       if (num === '.' && !this.display.includes('.')) {
@@ -66,12 +68,13 @@ export class CalculatorComponent {
       } else if (num !== '.') {
         this.display = this.display === '0' ? (num === '.' ? '0.' : num) : this.display + num;
       }
+      this.expression += num;
     }
   }
 
   appendOperator(op: string): void {
     if (op === '%') {
-      this.calculatePercentage();
+      this.handlePercent();
       return;
     }
 
@@ -83,6 +86,7 @@ export class CalculatorComponent {
       this.firstOperand = result;
     }
     this.operator = op;
+    this.expression += op;
     this.waitingForSecondOperand = true;
   }
 
@@ -137,6 +141,7 @@ export class CalculatorComponent {
           break;
       }
       this.display = String(result);
+      this.expression += '=';
       this.firstOperand = null;
       this.operator = null;
       this.waitingForSecondOperand = false;
@@ -146,6 +151,7 @@ export class CalculatorComponent {
 
   clear(): void {
     this.display = '0';
+    this.expression = '';
     this.firstOperand = null;
     this.operator = null;
     this.waitingForSecondOperand = false;
@@ -194,5 +200,18 @@ export class CalculatorComponent {
 
   onMouseUp(): void {
     this.dragging = false;
+  }
+
+  handlePercent(): void {
+    const value = parseFloat(this.display);
+    if (this.firstOperand !== null && this.operator) {
+      const percentValue = (this.firstOperand * value) / 100;
+      this.display = String(percentValue);
+      this.expression += '%';
+    } else {
+      const percentValue = value / 100;
+      this.display = String(percentValue);
+      this.expression += '%';
+    }
   }
 }

@@ -6,11 +6,14 @@
     <div class="calculator-header" (mousedown)="onMouseDown($event)">
       <button class="close-button" (click)="close()">×</button>
     </div>
-    <div class="display">{{ display }}</div>
+    <div class="display">
+      <div class="expression">{{ expression }}</div>
+      <div class="result">{{ display }}</div>
+    </div>
     <div class="keypad">
       <button (click)="clear()">C</button>
       <button (click)="delete()">&larr;</button>
-      <button (click)="appendOperator('%')">%</button>
+      <button (click)="handlePercent()">&#37;</button>
       <button (click)="appendOperator('/')">/</button>
 
       <button (click)="appendNumber('7')">7</button>

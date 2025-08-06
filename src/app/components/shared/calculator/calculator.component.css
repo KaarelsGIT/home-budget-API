@@ -93,3 +93,18 @@ button:hover {
 .equals:hover {
   background: #45a049;
 }
+
+.display {
+  text-align: right;
+  padding: 10px;
+}
+
+.expression {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.result {
+  font-size: 36px;
+  font-weight: bold;
+}
