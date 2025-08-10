@@ -40,6 +40,7 @@
     <table>
       <thead>
       <tr>
+        <th>#</th>
         <th (click)="setSort('user')">
           User
           <span *ngIf="filters.sortBy === 'user'">
@@ -75,7 +76,8 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let transaction of transactions">
+      <tr *ngFor="let transaction of transactions; let i = index">
+        <td>{{ i + 1 + (filters.page * filters.size) }}</td>
         <td>{{ transaction.user?.username || 'No user' }}</td>
         <td>{{ transaction.date | date:'dd.MM.yyyy' }}</td>
         <td>{{ transaction.category?.name }}</td>
@@ -94,7 +96,7 @@
 
 
       <tr *ngIf="selectedTransactionId !== null">
-        <td colspan="7">
+        <td colspan="8">
           <app-update-transaction-modal
             [transaction]="getSelectedTransaction()"
           >

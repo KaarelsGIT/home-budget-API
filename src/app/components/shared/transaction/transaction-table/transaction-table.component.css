@@ -58,7 +58,7 @@ table th {
   text-align: center;
 }
 
-td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5) {
+td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4),td:nth-child(6) {
   text-align: center !important;
 }
 
@@ -78,12 +78,17 @@ tr:hover {
   background-color: #e8f5e9;
 }
 
-td:nth-child(4) {
+td:nth-child(5) {
   text-align: right !important;
   padding-right: 40px !important;
 }
 
-th:nth-child(6), td:nth-child(6) {
+th:nth-child(1), td:nth-child(1) {
+  width: 5%;
+  min-width: 200px;
+}
+
+th:nth-child(7), td:nth-child(7) {
   width: 32%;
   min-width: 200px;
 }
@@ -92,7 +97,7 @@ table td {
   font-size: 16px;
 }
 
-/* .action-buttons on konteiner, kus on nupud */
+
 .action-buttons {
   display: flex;
   justify-content: center;
@@ -126,7 +131,7 @@ table td {
   background-color: darkred;
 }
 
-/* Update pagination styles */
+
 .pagination {
   display: flex;
   justify-content: space-between;
