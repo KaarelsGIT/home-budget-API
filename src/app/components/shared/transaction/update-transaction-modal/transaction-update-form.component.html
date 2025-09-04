@@ -30,10 +30,11 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Amount(€):</label>
+          <label>Amount (€):</label>
           <input
-            type="number"
+            type="text"
             [(ngModel)]="transaction.amount"
+            (input)="sanitizeAmount()"
             name="amount"
             required
           >

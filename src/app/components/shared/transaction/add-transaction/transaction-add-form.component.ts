@@ -34,7 +34,7 @@ export class TransactionAddFormComponent implements OnInit {
   transaction = {
     user: this.activeUser as User | null,
     category: null as Category | null,
-    amount: null,
+    amount: null as string | number | null,
     date: '',
     description: ''
   };
@@ -67,19 +67,27 @@ export class TransactionAddFormComponent implements OnInit {
       });
   }
 
+  sanitizeAmount() {
+    if (typeof this.transaction.amount === 'string') {
+      this.transaction.amount = this.transaction.amount.replace(',', '.');
+    }
+  }
+
   addTransaction(): void {
-    if (!this.transaction.amount || !this.transaction.date) {
+    const normalizedAmount = Number(this.transaction.amount);
+
+    if (!normalizedAmount || !this.transaction.date) {
       alert('Amount and Date are required!');
       return;
     }
 
     const transactionData = {
       ...this.transaction,
-      user: this.transaction.user ? {id: this.transaction.user.id} : null,
+      amount: normalizedAmount, // Use normalized amount
+      user: this.transaction.user ? { id: this.transaction.user.id } : null,
       category: this.transaction.category,
-      amount: this.transaction.amount,
       date: this.transaction.date,
-      description: this.transaction.description
+      description: this.transaction.description,
     };
 
     this.transactionService.addTransaction(this.type, transactionData).subscribe({
@@ -91,14 +99,13 @@ export class TransactionAddFormComponent implements OnInit {
           category: this.transaction.category,
           amount: null,
           date: this.transaction.date,
-          description: ''
+          description: '',
         };
       },
       error: (err) => {
-        console.error('Error adding transaction-table:', err);
-        alert('Failed to add transaction-table.');
-      }
+        console.error('Error adding transaction:', err);
+        alert('Failed to add transaction.');
+      },
     });
   }
-
 }

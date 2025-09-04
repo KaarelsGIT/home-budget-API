@@ -52,8 +52,24 @@ export class TransactionUpdateFormComponent implements OnChanges {
     }
   }
 
+  sanitizeAmount() {
+    if (typeof this.transaction.amount === 'string') {
+      this.transaction.amount = this.transaction.amount.replace(',', '.');
+    }
+  }
+
   onSave() {
     if (this.isLoading) return;
+
+    const normalizedAmount = Number(this.transaction.amount);
+
+    if (!normalizedAmount) {
+      alert('Please provide a valid amount.');
+      return;
+    }
+
+    this.transaction.amount = normalizedAmount;
+
     this.isLoading = true;
     this.save.emit(this.transaction);
   }
