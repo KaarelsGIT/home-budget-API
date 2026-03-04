@@ -58,7 +58,11 @@
   margin-bottom: 15px;
   border-radius: 5px;
   border: 1px solid #ddd;
-  min-height: 40px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .keypad {
@@ -94,17 +98,23 @@ button:hover {
   background: #45a049;
 }
 
-.display {
-  text-align: right;
-  padding: 10px;
-}
-
 .expression {
   font-size: 14px;
   color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .result {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: bold;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.result::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
 }

@@ -15,9 +15,9 @@ export class CalculatorComponent {
 
   display: string = '0';
   expression: string = '';
-  firstOperand: number | null = null;
-  operator: string | null = null;
+  private tokens: string[] = [];
   waitingForSecondOperand: boolean = false;
+  private hasResult = false;
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -58,111 +58,169 @@ export class CalculatorComponent {
   }
 
   appendNumber(num: string): void {
+    if (this.hasResult) {
+      this.clear();
+      this.hasResult = false;
+    }
+
     if (this.waitingForSecondOperand) {
       this.display = num === '.' ? '0.' : num;
-      this.expression += this.display;
       this.waitingForSecondOperand = false;
     } else {
-      if (num === '.' && !this.display.includes('.')) {
-        this.display = this.display + num;
-      } else if (num !== '.') {
-        this.display = this.display === '0' ? (num === '.' ? '0.' : num) : this.display + num;
+      if (num === '.') {
+        if (!this.display.includes('.')) {
+          this.display += num;
+        }
+      } else {
+        this.display = this.display === '0' ? num : this.display + num;
       }
-      this.expression += num;
+    }
+    this.updateExpressionFromDisplay();
+  }
+
+  private updateExpressionFromDisplay(): void {
+    const lastTokenIndex = this.tokens.length - 1;
+    const lastToken = this.tokens[lastTokenIndex];
+
+    if (this.tokens.length === 0 || this.isOperator(lastToken)) {
+      this.expression = this.tokens.join(' ') + (this.tokens.length > 0 ? ' ' : '') + this.display;
+    } else {
+      // Replacing the last number token (or percent token)
+      const newTokens = [...this.tokens];
+      newTokens[lastTokenIndex] = this.display;
+      this.expression = newTokens.join(' ');
     }
   }
 
+  private isOperator(token: string): boolean {
+    return ['+', '-', '*', '/'].includes(token);
+  }
+
   appendOperator(op: string): void {
+    if (this.hasResult) {
+      const result = this.display;
+      this.clear();
+      this.display = result;
+      this.hasResult = false;
+    }
+
     if (op === '%') {
       this.handlePercent();
       return;
     }
 
-    if (this.firstOperand === null) {
-      this.firstOperand = parseFloat(this.display);
-    } else if (this.operator) {
-      const result = this.calculate();
-      this.display = String(result);
-      this.firstOperand = result;
+    if (this.waitingForSecondOperand && this.tokens.length > 0) {
+      // Replace last operator
+      this.tokens[this.tokens.length - 1] = op;
+    } else {
+      this.tokens.push(this.display);
+      this.tokens.push(op);
     }
-    this.operator = op;
-    this.expression += op;
+
     this.waitingForSecondOperand = true;
+    this.expression = this.tokens.join(' ');
   }
 
-  calculatePercentage(): void {
-    const currentValue = parseFloat(this.display);
-    if (this.firstOperand === null) {
-      this.display = String(currentValue / 100);
-    } else if (this.operator) {
-      let result: number;
-      const percentage = (this.firstOperand * currentValue) / 100;
-
-      switch (this.operator) {
-        case '+':
-          result = this.firstOperand + percentage;
-          break;
-        case '-':
-          result = this.firstOperand - percentage;
-          break;
-        case '*':
-          result = percentage;
-          break;
-        case '/':
-          result = this.firstOperand / (currentValue / 100);
-          break;
-        default:
-          result = percentage;
-      }
-      this.display = String(result);
-      this.firstOperand = null;
-      this.operator = null;
-      this.waitingForSecondOperand = false;
+  handlePercent(): void {
+    if (this.hasResult) {
+      const result = this.display;
+      this.clear();
+      this.display = result;
+      this.hasResult = false;
     }
+
+    const value = parseFloat(this.display);
+    let percentValue: number;
+
+    const lastOp = this.tokens[this.tokens.length - 1];
+    if (this.tokens.length >= 2 && (lastOp === '+' || lastOp === '-')) {
+      // For addition/subtraction, percent is based on the first term of the expression (simplified logic)
+      // or more accurately, the base value it's being added to.
+      // Let's find the base value.
+      const baseValue = this.evaluateTokens(this.tokens.slice(0, -1));
+      percentValue = (baseValue * value) / 100;
+    } else {
+      percentValue = value / 100;
+    }
+
+    this.display = String(Number(percentValue.toFixed(10)));
+    this.waitingForSecondOperand = false;
+
+    // Add percent to expression display
+    if (this.tokens.length > 0 && !this.isOperator(this.tokens[this.tokens.length - 1])) {
+       // Should not happen with current logic as we push display then operator
+    }
+    this.expression = this.tokens.join(' ') + (this.tokens.length > 0 ? ' ' : '') + value + '%';
   }
 
-  calculate(): number {
-    const secondOperand = parseFloat(this.display);
-    let result: number = 0;
+  calculate(): void {
+    if (this.hasResult || this.tokens.length === 0) return;
 
-    if (this.operator && this.firstOperand !== null) {
-      switch (this.operator) {
-        case '+':
-          result = this.firstOperand + secondOperand;
-          break;
-        case '-':
-          result = this.firstOperand - secondOperand;
-          break;
-        case '*':
-          result = this.firstOperand * secondOperand;
-          break;
-        case '/':
-          result = this.firstOperand / secondOperand;
-          break;
+    this.tokens.push(this.display);
+    const result = this.evaluateTokens(this.tokens);
+
+    this.expression += ' = ';
+    this.display = String(Number(result.toFixed(10)));
+    this.tokens = [];
+    this.waitingForSecondOperand = false;
+    this.hasResult = true;
+  }
+
+  private evaluateTokens(tokens: string[]): number {
+    if (tokens.length === 0) return 0;
+
+    // Process * and / first (Precedence)
+    let tempTokens: (number | string)[] = [];
+    let i = 0;
+    while (i < tokens.length) {
+      const token = tokens[i];
+      if (token === '*' || token === '/') {
+        const prev = tempTokens.pop() as number;
+        const next = parseFloat(tokens[i + 1]);
+        const result = token === '*' ? prev * next : prev / next;
+        tempTokens.push(result);
+        i += 2;
+      } else {
+        const val = parseFloat(token);
+        tempTokens.push(isNaN(val) ? token : val);
+        i++;
       }
-      this.display = String(result);
-      this.expression += '=';
-      this.firstOperand = null;
-      this.operator = null;
-      this.waitingForSecondOperand = false;
     }
+
+    // Process + and -
+    let result = tempTokens[0] as number;
+    let j = 1;
+    while (j < tempTokens.length) {
+      const op = tempTokens[j] as string;
+      const next = tempTokens[j + 1] as number;
+      if (op === '+') result += next;
+      if (op === '-') result -= next;
+      j += 2;
+    }
+
     return result;
   }
 
   clear(): void {
     this.display = '0';
     this.expression = '';
-    this.firstOperand = null;
-    this.operator = null;
+    this.tokens = [];
     this.waitingForSecondOperand = false;
+    this.hasResult = false;
   }
 
   delete(): void {
+    if (this.hasResult) {
+      this.clear();
+      return;
+    }
+
     if (this.display.length > 1) {
       this.display = this.display.slice(0, -1);
     } else {
       this.display = '0';
     }
+    this.updateExpressionFromDisplay();
   }
 
   close(): void {
@@ -200,18 +258,5 @@ export class CalculatorComponent {
 
   onMouseUp(): void {
     this.dragging = false;
-  }
-
-  handlePercent(): void {
-    const value = parseFloat(this.display);
-    if (this.firstOperand !== null && this.operator) {
-      const percentValue = (this.firstOperand * value) / 100;
-      this.display = String(percentValue);
-      this.expression += '%';
-    } else {
-      const percentValue = value / 100;
-      this.display = String(percentValue);
-      this.expression += '%';
-    }
   }
 }

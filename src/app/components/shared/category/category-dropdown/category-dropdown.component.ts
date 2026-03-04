@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { CategoryService } from '../../../../services/category.service';
 import { Category } from '../../../../models/category';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf} from '@angular/common';
 import {AddCategoryModalComponent} from '../add-category-modal/add-category-modal.component';
 
 @Component({
@@ -11,7 +11,6 @@ import {AddCategoryModalComponent} from '../add-category-modal/add-category-moda
   imports: [
     FormsModule,
     NgForOf,
-    NgIf,
     AddCategoryModalComponent
   ],
   templateUrl: './category-dropdown.component.html',

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {TransactionService} from '../../../../services/transaction.service';
 import {FormsModule} from '@angular/forms';
 import {TitleCasePipe} from '@angular/common';
@@ -8,6 +8,8 @@ import {UserDropdownComponent} from '../../user/user-dropdown/user-dropdown.comp
 import {CategoryDropdownComponent} from '../../category/category-dropdown/category-dropdown.component';
 import {CategoryService} from '../../../../services/category.service';
 import {Category} from '../../../../models/category';
+import {ActiveUserService} from '../../../../services/active-user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-add-transaction',
@@ -21,14 +23,17 @@ import {Category} from '../../../../models/category';
   templateUrl: './transaction-add-form.component.html',
   styleUrl: './transaction-add-form.component.css'
 })
-export class TransactionAddFormComponent implements OnInit {
+export class TransactionAddFormComponent implements OnInit, OnDestroy {
   @Input() type!: 'income' | 'expense';
   @Input() activeUser: User | null = null;
   @Output() transactionAdded = new EventEmitter<void>();
 
+  private userSubscription: Subscription | null = null;
+
   constructor(private transactionService: TransactionService,
               private userService: UserService,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private activeUserService: ActiveUserService) {
   }
 
   transaction = {
@@ -42,6 +47,17 @@ export class TransactionAddFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.activeUser) {
       this.transaction.user = this.activeUser;
+    }
+
+    // Subscribe to globally selected user from ActiveUserService
+    this.userSubscription = this.activeUserService.getActiveUser().subscribe(user => {
+      this.transaction.user = user;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Chart } from 'chart.js/auto';
 import { TransactionService } from '../../../services/transaction.service';
 import { RouterModule } from '@angular/router';
+import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
 
 interface Transaction {
   amount: number;
@@ -26,11 +27,12 @@ interface TransactionResponse {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule], // Removed unused TransactionTableComponent
+  imports: [CommonModule, RouterModule, YearDropdownComponent], // Added YearDropdownComponent
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
+  selectedYear: number = new Date().getFullYear();
   totalIncome: number = 0;
   totalExpense: number = 0;
   balance: number = 0;
@@ -42,6 +44,9 @@ export class DashboardComponent implements OnInit {
     previousYear: { income: 0, expense: 0 }
   };
 
+  private monthlyChartInstance: Chart | null = null;
+  private categoryChartInstance: Chart | null = null;
+
   constructor(private transactionService: TransactionService) {}
 
   ngOnInit() {
@@ -49,14 +54,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData() {
-    const defaultFilters = {
-      page: 0,
-      size: 1000,
-      sortBy: 'date',
-      sortOrder: 'desc',
-      year: new Date().getFullYear()
-    };
-
+    this.monthlyData = {}; // Clear previous data
     const recentFilters = {
       page: 0,
       size: 5,
@@ -64,9 +62,16 @@ export class DashboardComponent implements OnInit {
       sortOrder: 'desc'
     };
 
-    this.loadYearData(defaultFilters.year);
-    this.loadYearData(defaultFilters.year - 1);
+    this.loadYearData(this.selectedYear);
+    this.loadYearData(this.selectedYear - 1);
     this.loadRecentTransactions(recentFilters);
+  }
+
+  onYearChange(year: number | null): void {
+    if (year) {
+      this.selectedYear = year;
+      this.loadDashboardData();
+    }
   }
 
   private updateBalance(): void {
@@ -106,7 +111,7 @@ export class DashboardComponent implements OnInit {
     this.transactionService.getTransactions('income', filters).subscribe({
       next: (response: TransactionResponse) => {
         const transactions = response.transactionPage.content;
-        if (year === new Date().getFullYear()) {
+        if (year === this.selectedYear) {
           this.totalIncome = response.allTotal;
           this.yearToDateComparison.currentYear.income = response.allTotal;
           this.updateBalance();
@@ -121,7 +126,7 @@ export class DashboardComponent implements OnInit {
     this.transactionService.getTransactions('expense', filters).subscribe({
       next: (response: TransactionResponse) => {
         const transactions = response.transactionPage.content;
-        if (year === new Date().getFullYear()) {
+        if (year === this.selectedYear) {
           this.totalExpense = response.allTotal;
           this.yearToDateComparison.currentYear.expense = response.allTotal;
           this.updateBalance();
@@ -165,7 +170,11 @@ export class DashboardComponent implements OnInit {
     const ctx = document.getElementById('monthlyChart') as HTMLCanvasElement;
     if (!ctx) return;
 
-    new Chart(ctx, {
+    if (this.monthlyChartInstance) {
+      this.monthlyChartInstance.destroy();
+    }
+
+    this.monthlyChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -199,7 +208,11 @@ export class DashboardComponent implements OnInit {
     const ctx = document.getElementById('categoryChart') as HTMLCanvasElement;
     if (!ctx) return;
 
-    new Chart(ctx, {
+    if (this.categoryChartInstance) {
+      this.categoryChartInstance.destroy();
+    }
+
+    this.categoryChartInstance = new Chart(ctx, {
       type: 'pie',
       data: {
         labels: this.categoryData.map(item => item.name),

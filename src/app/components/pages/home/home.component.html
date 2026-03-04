@@ -1,5 +1,13 @@
 <div class="financial-summary">
-  <h2>Financial Summary {{currentYear}}</h2>
+  <div class="header-container">
+    <h2>Financial Summary {{currentYear}}</h2>
+    <div class="year-selector">
+      <app-year-dropdown
+        [selectedYear]="currentYear"
+        (selectedYearChange)="onYearChange($event)">
+      </app-year-dropdown>
+    </div>
+  </div>
 
   <!-- Monthly Balance -->
   <div class="table-section">

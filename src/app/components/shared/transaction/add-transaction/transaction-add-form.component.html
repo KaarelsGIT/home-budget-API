@@ -9,6 +9,7 @@
         <app-user-dropdown
           [styleType]="'form'"
           [placeholder]="'Choose User'"
+          [selectedUser]="transaction.user?.id ?? null"
           (selectedUserChange)="onUserChange($event)">
         </app-user-dropdown>
       </div>

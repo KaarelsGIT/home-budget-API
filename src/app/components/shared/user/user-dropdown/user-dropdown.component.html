@@ -41,13 +41,13 @@
     [ngModel]="activeUser?.id"
     (ngModelChange)="setActiveUserFromId($event)">
     <option
-      [value]="null"
-      disabled selected>{{ placeholder }}
+      [ngValue]="null">
+      {{ placeholder }}
     </option>
 
     <option
       *ngFor="let user of users"
-      [value]="user.id">
+      [ngValue]="user.id">
       {{ user.username }}
     </option>
 

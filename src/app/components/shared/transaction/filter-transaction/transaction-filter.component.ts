@@ -37,7 +37,7 @@ export class TransactionFilterComponent {
     this.filters.month = null;
     this.filters.userId = null;
     this.filters.categoryId = null;
-    this.filtersChange.emit();
+    this.onFilterChange();
     this.userDropdownComponent.fetchUsers();
   }
 

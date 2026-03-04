@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../../services/transaction.service';
@@ -40,9 +40,9 @@ export class TransactionTableComponent implements OnInit {
   filters = {
     userId: null as string | number | null,
     categoryId: null as string | number | null,
-    month: null as number | null,
+    month: new Date().getMonth() + 1,
     date: null,
-    year: null,
+    year: new Date().getFullYear(),
     sortBy: 'date',
     sortOrder: 'desc',
     page: 0,
@@ -53,9 +53,16 @@ export class TransactionTableComponent implements OnInit {
   constructor(private transactionService: TransactionService) {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['type']) {
+      this.fetchYears();
+      this.refreshTable();
+    }
+  }
+
   ngOnInit(): void {
-    this.fetchYears();
-    this.fetchTransactions();
+    // Both fetchYears and fetchTransactions will be called by ngOnChanges
+    // when the initial @Input 'type' is set.
   }
 
   fetchYears(): void {
@@ -72,8 +79,7 @@ export class TransactionTableComponent implements OnInit {
     if (updatedFilters) {
       this.filters = { ...updatedFilters };
     }
-    this.filters.page = 0;
-    this.fetchTransactions();
+    this.refreshTable();
   }
 
   setSort(column: string): void {
@@ -84,26 +90,46 @@ export class TransactionTableComponent implements OnInit {
       this.filters.sortOrder = 'desc';
     }
 
+    this.filters.page = 0; // Always reset to first page when changing sort
     this.fetchTransactions();
   }
 
   fetchTransactions(): void {
-    if (!this.type) return;
+    if (!this.type) {
+      console.warn('TransactionTableComponent.fetchTransactions: this.type is not defined');
+      return;
+    }
 
     const params: any = {...this.filters};
-    params.year = params.year ? Number(params.year) : null;
-    params.month = params.month ? Number(params.month) : null;
-    params.userId = params.userId ? Number(params.userId) : null;
-    params.categoryId = params.categoryId ? Number(params.categoryId) : null;
+    // Ensure numeric types for API filters
+    params.year = (params.year !== null && params.year !== 'null' && params.year !== '') ? Number(params.year) : null;
+    params.month = (params.month !== null && params.month !== 'null' && params.month !== '') ? Number(params.month) : null;
+    params.userId = (params.userId !== null && params.userId !== 'null' && params.userId !== '') ? Number(params.userId) : null;
+    params.categoryId = (params.categoryId !== null && params.categoryId !== 'null' && params.categoryId !== '') ? Number(params.categoryId) : null;
 
-    this.transactionService.getTransactions(this.type, params).subscribe(response => {
-      this.transactions = response.transactionPage.content;
-      this.totalElements = response.transactionPage.page.totalElements;
-      this.hasMorePages = (this.filters.page + 1) * this.filters.size < this.totalElements;
-      this.pageTotal = response.pageTotal;
-      this.allTotal = response.allTotal;
-    }, error => {
-      console.error('API error:', error);
+    if (params.sortBy === 'date') {
+      params.sortBy = 'created';
+    }
+
+    console.log(`Fetching ${this.type} transactions with params:`, params);
+
+    this.transactionService.getTransactions(this.type, params).subscribe({
+      next: (response) => {
+        if (response && response.transactionPage) {
+          this.transactions = response.transactionPage.content;
+          this.totalElements = response.transactionPage.page.totalElements;
+          this.hasMorePages = (this.filters.page + 1) * this.filters.size < this.totalElements;
+          this.pageTotal = response.pageTotal;
+          this.allTotal = response.allTotal;
+        } else {
+          console.warn('Unexpected API response structure:', response);
+          this.transactions = [];
+        }
+      },
+      error: (error) => {
+        console.error('API error:', error);
+        this.transactions = [];
+      }
     });
   }
 
@@ -166,6 +192,7 @@ export class TransactionTableComponent implements OnInit {
   }
 
   refreshTable(): void {
+    this.filters.page = 0;
     this.fetchTransactions();
   }
 }

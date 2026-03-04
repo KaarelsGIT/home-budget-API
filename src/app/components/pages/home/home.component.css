@@ -1,3 +1,22 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-container h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.year-selector {
+  min-width: 150px;
+}
+
 .financial-summary {
   padding: 20px;
 }
@@ -83,7 +102,5 @@ h2, h3 {
 }
 
 h2 {
-  text-align: center;
-  margin-bottom: 30px;
   font-size: 45px;
 }

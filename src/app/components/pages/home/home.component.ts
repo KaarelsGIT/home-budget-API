@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
+import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
 
 interface CategoryTotals {
   [category: string]: {
@@ -12,7 +13,7 @@ interface CategoryTotals {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, YearDropdownComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -34,6 +35,26 @@ export class HomeComponent implements OnInit {
   totalBalance = 0;
 
   constructor(private transactionService: TransactionService) {
+    this.resetTotals();
+  }
+
+  ngOnInit() {
+    this.loadYearData();
+  }
+
+  onYearChange(year: number | null): void {
+    if (year) {
+      this.currentYear = year;
+      this.loadYearData();
+    }
+  }
+
+  private resetTotals() {
+    this.incomeTotals = {};
+    this.expenseTotals = {};
+    this.totalIncome = 0;
+    this.totalExpense = 0;
+    this.totalBalance = 0;
     this.months.forEach(month => {
       this.monthlyTotals.income[month] = 0;
       this.monthlyTotals.expense[month] = 0;
@@ -41,11 +62,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.loadYearData();
-  }
-
   private loadYearData() {
+    this.resetTotals();
     const filters = {
       year: this.currentYear,
       page: 0,

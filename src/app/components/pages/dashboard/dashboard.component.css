@@ -6,12 +6,21 @@
 
 .dashboard-header {
   margin-bottom: 30px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .dashboard-header h1 {
   color: #333;
   font-size: 2em;
+  margin: 0;
+}
+
+.year-selector {
+  min-width: 150px;
 }
 
 .dashboard-cards {

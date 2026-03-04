@@ -3,13 +3,13 @@
   (ngModelChange)="onMonthChange($event)"
 >
   <option
-    [value]="null">
+    [ngValue]="null">
     All Months
   </option>
 
   <option
     *ngFor="let month of months"
-    [value]="month.value">
+    [ngValue]="month.value">
     {{ month.name }}
   </option>
 </select>

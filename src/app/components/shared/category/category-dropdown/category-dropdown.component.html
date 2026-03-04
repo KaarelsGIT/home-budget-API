@@ -1,23 +1,16 @@
 <div>
   <select
     [(ngModel)]="selectedCategory"
-    (change)="onCategoryChange()"
+    (ngModelChange)="onCategoryChange()"
   >
     <option
-      [value]="null"
-      disabled selected>
+      [ngValue]="null">
       {{ placeholder }}
     </option>
 
     <option
-      *ngIf="allowAddCategory"
-      value="__add__">
-      ➕ Add Category
-    </option>
-
-    <option
       *ngFor="let category of categories"
-      [value]="category.id">
+      [ngValue]="category.id">
       {{ category.name }}
     </option>
   </select>

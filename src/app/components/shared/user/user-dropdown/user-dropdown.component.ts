@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {UserService} from '../../../../services/user.service';
 import {User} from '../../../../models/user';
 import {NgForOf, NgIf} from '@angular/common';
@@ -16,7 +16,7 @@ import {ActiveUserService} from '../../../../services/active-user.service';
     FormsModule
   ],
 })
-export class UserDropdownComponent implements OnInit {
+export class UserDropdownComponent implements OnInit, OnChanges {
   @Input() selectedUser: number | string | null = null;
   @Input() styleType: 'header' | 'form' = 'form';
   @Output() selectedUserChange = new EventEmitter<string | number | null>();
@@ -33,7 +33,6 @@ export class UserDropdownComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUsers();
-    this.loadSelectedUser();
   }
 
   fetchUsers(): void {
@@ -41,7 +40,9 @@ export class UserDropdownComponent implements OnInit {
       (users) => {
         this.users = users;
         this.backendError = false;
-        this.activeUser = this.users.find(u => u.id === this.selectedUser) || null;
+        if (this.selectedUser) {
+          this.activeUser = this.users.find(u => u.id == this.selectedUser) || null;
+        }
       },
       () => {
         this.backendError = true;
@@ -50,13 +51,9 @@ export class UserDropdownComponent implements OnInit {
     );
   }
 
-  loadSelectedUser(): void {
-    const storedUserId = localStorage.getItem('selectedUserId');
-    if (storedUserId) {
-      const user = this.users.find(u => u.id === +storedUserId);
-      if (user) {
-        this.activeUser = user;
-      }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedUser'] && this.users.length > 0) {
+      this.activeUser = this.users.find(u => u.id == this.selectedUser) || null;
     }
   }
 
@@ -67,7 +64,6 @@ export class UserDropdownComponent implements OnInit {
   setActiveUser(user: User): void {
     this.activeUser = user;
     this.selectedUserChange.emit(user.id);
-    localStorage.setItem('selectedUserId', user.id.toString());
     this.isDropdownOpen = false;
   }
 

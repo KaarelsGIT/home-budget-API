@@ -5,12 +5,12 @@
       name="year" (change)="onFilterChange()"
     >
       <option
-        value=null>
+        [ngValue]="null">
         All years
       </option>
 
       <option
-        *ngFor="let year of years" [value]="year">
+        *ngFor="let year of years" [ngValue]="year">
         {{ year }}
       </option>
     </select>
@@ -35,7 +35,7 @@
     <app-category-dropdown
       [type]="type"
       [asList]="true"
-      [(selectedCategory)]="filters.categoryId"
+      [selectedCategory]="filters.categoryId"
       (selectedCategoryChange)="onCategoryChange($event)">
     </app-category-dropdown>
   </div>
