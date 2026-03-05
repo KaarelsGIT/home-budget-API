@@ -81,7 +81,7 @@
         <td>{{ transaction.user?.username || 'No user' }}</td>
         <td>{{ transaction.date | date:'dd.MM.yyyy' }}</td>
         <td>{{ transaction.category?.name }}</td>
-        <td>{{ transaction.amount }} €</td>
+        <td>{{ transaction.amount | number:'1.2-2' }} €</td>
         <td>{{ transaction.created | date:'dd.MM.yyyy - HH:mm' }}</td>
         <td>{{ transaction.description }}</td>
         <td class="action-buttons">
@@ -137,7 +137,7 @@
 
   <!-- 📊 SUMMARY -->
   <div class="summary">
-    <p>All Total (with filters): {{ allTotal }} EUR</p>
+    <p>All Total (with filters): {{ allTotal | number:'1.2-2' }} EUR</p>
   </div>
 </div>
 

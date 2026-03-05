@@ -34,7 +34,7 @@
           <input
             type="text"
             [(ngModel)]="transaction.amount"
-            (input)="sanitizeAmount()"
+            (blur)="sanitizeAmount()"
             name="amount"
             required
           >

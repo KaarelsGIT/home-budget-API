@@ -1,5 +1,5 @@
+import {CommonModule} from '@angular/common';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../../services/transaction.service';
 import {TransactionAddFormComponent} from '../add-transaction/transaction-add-form.component';
@@ -11,10 +11,8 @@ import {TransactionUpdateFormComponent} from '../update-transaction-modal/transa
   standalone: true,
   templateUrl: './transaction-table.component.html',
   imports: [
-    NgForOf,
+    CommonModule,
     FormsModule,
-    NgIf,
-    DatePipe,
     TransactionAddFormComponent,
     TransactionFilterComponent,
     TransactionUpdateFormComponent

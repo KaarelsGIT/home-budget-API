@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {NgIf, TitleCasePipe} from '@angular/common';
 import {CategoryDropdownComponent} from '../../category/category-dropdown/category-dropdown.component';
 import {UserDropdownComponent} from '../../user/user-dropdown/user-dropdown.component';
+import {evaluateMathExpression} from '../../../../utils/math-evaluator';
 
 @Component({
   selector: 'app-update-transaction-modal',
@@ -54,7 +55,10 @@ export class TransactionUpdateFormComponent implements OnChanges {
 
   sanitizeAmount() {
     if (typeof this.transaction.amount === 'string') {
-      this.transaction.amount = this.transaction.amount.replace(',', '.');
+      const calculatedResult = evaluateMathExpression(this.transaction.amount);
+      if (calculatedResult !== null && !isNaN(calculatedResult)) {
+        this.transaction.amount = calculatedResult.toString();
+      }
     }
   }
 

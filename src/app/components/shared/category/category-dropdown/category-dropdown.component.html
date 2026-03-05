@@ -9,16 +9,16 @@
     </option>
 
     <option
-      *ngFor="let category of categories"
-      [ngValue]="category.id">
-      {{ category.name }}
-    </option>
-
-    <option
       *ngIf="allowAddCategory"
       [ngValue]="'__add__'"
       class="add-new-option">
-      + Add New Category
+      &nbsp;&nbsp;&nbsp;+ Add New Category
+    </option>
+
+    <option
+      *ngFor="let category of categories"
+      [ngValue]="category.id">
+      {{ category.name }}
     </option>
   </select>
 </div>

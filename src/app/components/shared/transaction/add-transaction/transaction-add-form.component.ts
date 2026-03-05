@@ -10,6 +10,7 @@ import {CategoryService} from '../../../../services/category.service';
 import {Category} from '../../../../models/category';
 import {ActiveUserService} from '../../../../services/active-user.service';
 import {Subscription} from 'rxjs';
+import {evaluateMathExpression} from '../../../../utils/math-evaluator';
 
 @Component({
   selector: 'app-add-transaction',
@@ -85,7 +86,10 @@ export class TransactionAddFormComponent implements OnInit, OnDestroy {
 
   sanitizeAmount() {
     if (typeof this.transaction.amount === 'string') {
-      this.transaction.amount = this.transaction.amount.replace(',', '.');
+      const calculatedResult = evaluateMathExpression(this.transaction.amount);
+      if (calculatedResult !== null && !isNaN(calculatedResult)) {
+        this.transaction.amount = calculatedResult.toString();
+      }
     }
   }
 
