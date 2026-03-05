@@ -4,6 +4,7 @@ import { Chart } from 'chart.js/auto';
 import { TransactionService } from '../../../services/transaction.service';
 import { RouterModule } from '@angular/router';
 import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
+import { MonthDropdownComponent, MONTHS } from '../../shared/transaction/month-dropdown/month-dropdown.component';
 import { Subscription } from 'rxjs';
 
 interface Transaction {
@@ -28,12 +29,13 @@ interface TransactionResponse {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, YearDropdownComponent], // Added YearDropdownComponent
+  imports: [CommonModule, RouterModule, YearDropdownComponent, MonthDropdownComponent], // Added YearDropdownComponent
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   selectedYear: number = new Date().getFullYear();
+  selectedMonth: number | null = null;
   totalIncome: number = 0;
   totalExpense: number = 0;
   balance: number = 0;
@@ -41,6 +43,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   recentIncomes: Transaction[] = [];
   recentExpenses: Transaction[] = [];
   categoryData: { name: string; total: number }[] = [];
+  months = MONTHS;
   yearToDateComparison = {
     currentYear: { income: 0, expense: 0 },
     previousYear: { income: 0, expense: 0 }
@@ -68,12 +71,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadDashboardData() {
     this.monthlyData = {}; // Clear previous data
-    const recentFilters = {
+    const recentFilters: any = {
       page: 0,
       size: 5,
       sortBy: 'date',
       sortOrder: 'desc'
     };
+    if (this.selectedMonth) {
+      recentFilters.month = this.selectedMonth;
+      recentFilters.year = this.selectedYear;
+    }
 
     this.loadYearData(this.selectedYear);
     this.loadYearData(this.selectedYear - 1);
@@ -87,13 +94,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMonthChange(month: number | null): void {
+    this.selectedMonth = month;
+    this.loadDashboardData();
+  }
+
   private updateBalance(): void {
     this.balance = this.totalIncome - this.totalExpense;
   }
 
   private updateMonthlyChart(type: string, transactions: Transaction[]): void {
-    const monthlyTotals = this.calculateMonthlyTotals(transactions);
-    this.monthlyData[type] = monthlyTotals;
+    if (this.selectedMonth) {
+      this.monthlyData[type] = this.calculateDailyTotals(transactions, this.selectedMonth, this.selectedYear);
+    } else {
+      this.monthlyData[type] = this.calculateMonthlyTotals(transactions);
+    }
 
     if (this.monthlyData['income'] && this.monthlyData['expense']) {
       this.createMonthlyChart();
@@ -112,8 +127,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return monthlyTotals;
   }
 
+  private calculateDailyTotals(transactions: Transaction[], month: number, year: number): number[] {
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const dailyTotals = new Array(daysInMonth).fill(0);
+
+    transactions.forEach(transaction => {
+      const date = new Date(transaction.date);
+      if (date.getMonth() + 1 === month) {
+        const day = date.getDate();
+        dailyTotals[day - 1] += Number(transaction.amount);
+      }
+    });
+
+    return dailyTotals;
+  }
+
   private loadYearData(year: number) {
-    const filters = {
+    const filters: any = {
       page: 0,
       size: 1000,
       sortBy: 'date',
@@ -121,14 +151,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
       year: year
     };
 
+    // Always fetch full year for the monthly line chart
     this.transactionService.getTransactions('income', filters).subscribe({
       next: (response: TransactionResponse) => {
         const transactions = response.transactionPage.content;
         if (year === this.selectedYear) {
+          this.updateMonthlyChart('income', transactions);
+        }
+      }
+    });
+
+    this.transactionService.getTransactions('expense', filters).subscribe({
+      next: (response: TransactionResponse) => {
+        const transactions = response.transactionPage.content;
+        if (year === this.selectedYear) {
+          this.updateMonthlyChart('expense', transactions);
+        }
+      }
+    });
+
+    // If month is selected, fetch month-specific data for totals and pie chart
+    const summaryFilters: any = { ...filters };
+    if (year === this.selectedYear && this.selectedMonth) {
+      summaryFilters.month = this.selectedMonth;
+    }
+
+    this.transactionService.getTransactions('income', summaryFilters).subscribe({
+      next: (response: TransactionResponse) => {
+        if (year === this.selectedYear) {
           this.totalIncome = response.allTotal;
           this.yearToDateComparison.currentYear.income = response.allTotal;
           this.updateBalance();
-          this.updateMonthlyChart('income', transactions);
           this.createSummaryPieChart();
         } else {
           this.yearToDateComparison.previousYear.income = response.allTotal;
@@ -137,14 +190,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       error: (error) => console.error('Error fetching incomes:', error)
     });
 
-    this.transactionService.getTransactions('expense', filters).subscribe({
+    this.transactionService.getTransactions('expense', summaryFilters).subscribe({
       next: (response: TransactionResponse) => {
-        const transactions = response.transactionPage.content;
         if (year === this.selectedYear) {
           this.totalExpense = response.allTotal;
           this.yearToDateComparison.currentYear.expense = response.allTotal;
           this.updateBalance();
-          this.updateMonthlyChart('expense', transactions);
           this.createSummaryPieChart();
         } else {
           this.yearToDateComparison.previousYear.expense = response.allTotal;
@@ -208,10 +259,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.monthlyChartInstance.destroy();
     }
 
+    let labels: string[];
+    if (this.selectedMonth) {
+      const daysInMonth = new Date(this.selectedYear, this.selectedMonth, 0).getDate();
+      labels = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
+    } else {
+      labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    }
+
     this.monthlyChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: labels,
         datasets: [
           {
             label: 'Income',

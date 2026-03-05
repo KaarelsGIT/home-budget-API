@@ -20,7 +20,9 @@
 }
 
 .year-selector {
-  min-width: 150px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .dashboard-cards {

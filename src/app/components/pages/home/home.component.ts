@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
 import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
+import { MonthDropdownComponent, MONTHS } from '../../shared/transaction/month-dropdown/month-dropdown.component';
 import { Subscription } from 'rxjs';
 
 interface CategoryTotals {
@@ -14,7 +15,7 @@ interface CategoryTotals {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, YearDropdownComponent],
+  imports: [CommonModule, YearDropdownComponent, MonthDropdownComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -22,6 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   months = ['January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'];
   currentYear = new Date().getFullYear();
+  selectedMonth: number | null = null;
+  monthsList = MONTHS;
 
   incomeTotals: CategoryTotals = {};
   expenseTotals: CategoryTotals = {};
@@ -62,6 +65,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMonthChange(month: number | null): void {
+    this.selectedMonth = month;
+    this.loadYearData();
+  }
+
   private resetTotals() {
     this.incomeTotals = {};
     this.expenseTotals = {};
@@ -77,13 +85,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private loadYearData() {
     this.resetTotals();
-    const filters = {
+    const filters: any = {
       year: this.currentYear,
       page: 0,
       size: 1000,
       sortBy: 'date',
       sortOrder: 'desc'
     };
+
+    if (this.selectedMonth) {
+      filters.month = this.selectedMonth;
+    }
 
     this.transactionService.getTransactions('income', filters).subscribe({
       next: (response) => {
@@ -150,6 +162,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.monthlyTotals.income[month] - this.monthlyTotals.expense[month];
     });
     this.totalBalance = this.totalIncome - this.totalExpense;
+  }
+
+  getDisplayedMonths(): string[] {
+    if (this.selectedMonth) {
+      return [this.months[this.selectedMonth - 1]];
+    }
+    return this.months;
   }
 
   getCategories(type: 'income' | 'expense'): string[] {

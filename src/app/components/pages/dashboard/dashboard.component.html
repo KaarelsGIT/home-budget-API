@@ -6,12 +6,16 @@
         [selectedYear]="selectedYear"
         (selectedYearChange)="onYearChange($event)">
       </app-year-dropdown>
+      <app-month-dropdown
+        [selectedMonth]="selectedMonth"
+        (selectedMonthChange)="onMonthChange($event)">
+      </app-month-dropdown>
     </div>
   </div>
 
   <div class="dashboard-cards">
     <div class="dashboard-card income">
-      <h2>Total Income</h2>
+      <h2>Total Income <span *ngIf="selectedMonth">({{months[selectedMonth-1].name}})</span></h2>
       <p class="amount">€{{ totalIncome | number:'1.2-2' }}</p>
       <p class="comparison" [class.positive]="yearToDateComparison.currentYear.income > yearToDateComparison.previousYear.income">
         {{ ((yearToDateComparison.currentYear.income - yearToDateComparison.previousYear.income) / yearToDateComparison.previousYear.income * 100) | number:'1.0-1' }}% vs last year
@@ -19,7 +23,7 @@
     </div>
 
     <div class="dashboard-card expenses">
-      <h2>Total Expenses</h2>
+      <h2>Total Expenses <span *ngIf="selectedMonth">({{months[selectedMonth-1].name}})</span></h2>
       <p class="amount">€{{ totalExpense | number:'1.2-2' }}</p>
       <p class="comparison" [class.positive]="yearToDateComparison.currentYear.expense < yearToDateComparison.previousYear.expense">
         {{ ((yearToDateComparison.currentYear.expense - yearToDateComparison.previousYear.expense) / yearToDateComparison.previousYear.expense * 100) | number:'1.0-1' }}% vs last year
@@ -27,14 +31,14 @@
     </div>
 
     <div class="dashboard-card balance" [ngClass]="{'negative': balance < 0}">
-      <h2>Balance</h2>
+      <h2>Balance <span *ngIf="selectedMonth">({{months[selectedMonth-1].name}})</span></h2>
       <p class="amount">€{{ balance | number:'1.2-2' }}</p>
     </div>
   </div>
 
   <div class="dashboard-content">
     <div class="chart-container monthly-chart">
-      <h2>Monthly Overview</h2>
+      <h2>{{ selectedMonth ? months[selectedMonth-1].name + ' Overview' : 'Monthly Overview' }}</h2>
       <canvas id="monthlyChart"></canvas>
     </div>
 
