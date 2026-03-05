@@ -245,6 +245,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
           legend: {
             display: true,
             position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: (context: any) => {
+                let label = context.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed !== undefined) {
+                  label += context.parsed.toLocaleString() + ' €';
+                }
+                return label;
+              }
+            }
           }
         }
       }
@@ -288,9 +302,50 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        events: ['click', 'touchstart'],
+        interaction: {
+          intersect: false,
+          mode: 'nearest',
+          axis: 'xy'
+        },
+        plugins: {
+          tooltip: {
+            position: 'nearest',
+            callbacks: {
+              label: (context: any) => {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== undefined) {
+                  label += context.parsed.y.toLocaleString() + ' €';
+                }
+                return label;
+              }
+            }
+          }
+        },
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: (value) => {
+                return value.toLocaleString() + ' €';
+              }
+            }
+          },
+          y1: {
+            position: 'right',
+            beginAtZero: true,
+            grid: {
+              drawOnChartArea: false
+            },
+            ticks: {
+              callback: (value) => {
+                return value.toLocaleString() + ' €';
+              }
+            }
           }
         }
       }
