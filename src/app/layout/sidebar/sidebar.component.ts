@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import {NgForOf} from '@angular/common';
 
+import {RouterLink, RouterLinkActive} from '@angular/router';
+
 @Component({
   selector: 'app-sidebar',
   imports: [
-    NgForOf
+    NgForOf,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'

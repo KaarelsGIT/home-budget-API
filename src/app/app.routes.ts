@@ -5,12 +5,20 @@ import {IncomesComponent} from './components/pages/incomes/incomes.component';
 import {ExpensesComponent} from './components/pages/expenses/expenses.component';
 import {SettingsComponent} from './components/pages/settings/settings.component';
 import {AboutComponent} from './components/pages/about/about.component';
+import {CategoryManagerComponent} from './components/pages/category-manager/category-manager.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'summary', component: DashboardComponent },
   { path: 'incomes', component: IncomesComponent },
   { path: 'expenses', component: ExpensesComponent },
-  { path: 'settings', component: SettingsComponent },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    children: [
+      { path: 'categories', component: CategoryManagerComponent },
+      { path: '', redirectTo: 'categories', pathMatch: 'full' }
+    ]
+  },
   { path: 'about', component: AboutComponent }
 ];

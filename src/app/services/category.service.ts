@@ -27,6 +27,20 @@ export class CategoryService {
       );
   }
 
+  updateCategory(id: number, categoryData: Partial<Category>): Observable<Category> {
+    return this.http.put<Category>(`${this.url}/update/${id}`, categoryData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  deleteCategory(id: number): Observable<string> {
+    return this.http.delete(`${this.url}/delete/${id}`, { responseType: 'text' })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getCategoriesByType(type: 'income' | 'expense', asList: boolean = false): Observable<Category[]> {
     const upperType = type.toUpperCase();
     return this.http.get<any>(`${this.url}/all?type=${upperType}&asList=${asList}`).pipe(

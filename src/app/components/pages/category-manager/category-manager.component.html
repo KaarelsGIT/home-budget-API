@@ -1,0 +1,88 @@
+<div class="category-manager-container">
+  <h2>Manage Categories</h2>
+
+  <div class="category-sections">
+    <!-- Income Categories -->
+    <div class="category-section">
+      <div class="section-header">
+        <h3>Income Categories</h3>
+        <button class="btn btn-add" (click)="openAddModal('income')">Add New</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cat of incomeCategories">
+              <ng-container *ngIf="editingCategoryId !== cat.id; else editMode">
+                <td>{{ cat.name }}</td>
+                <td>{{ cat.description }}</td>
+                <td class="actions">
+                  <button class="btn btn-edit" (click)="startEdit(cat)">Edit</button>
+                  <button class="btn btn-delete" (click)="deleteCategory(cat.id)">Delete</button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Expense Categories -->
+    <div class="category-section">
+      <div class="section-header">
+        <h3>Expense Categories</h3>
+        <button class="btn btn-add" (click)="openAddModal('expense')">Add New</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cat of expenseCategories">
+              <ng-container *ngIf="editingCategoryId !== cat.id; else editMode">
+                <td>{{ cat.name }}</td>
+                <td>{{ cat.description }}</td>
+                <td class="actions">
+                  <button class="btn btn-edit" (click)="startEdit(cat)">Edit</button>
+                  <button class="btn btn-delete" (click)="deleteCategory(cat.id)">Delete</button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #editMode>
+    <td>
+      <input type="text" [(ngModel)]="editForm.name" placeholder="Name" class="edit-input">
+    </td>
+    <td>
+      <input type="text" [(ngModel)]="editForm.description" placeholder="Description" class="edit-input">
+    </td>
+    <td class="actions">
+      <button class="btn btn-save" (click)="saveEdit()">Save</button>
+      <button class="btn btn-cancel" (click)="cancelEdit()">Cancel</button>
+    </td>
+  </ng-template>
+
+  <app-add-category-modal
+    [isVisible]="isAddModalVisible"
+    [type]="addModalType"
+    [isInModal]="true"
+    (categoryAdded)="onCategoryAdded()"
+    (closeModal)="closeAddModal()"
+  ></app-add-category-modal>
+</div>
