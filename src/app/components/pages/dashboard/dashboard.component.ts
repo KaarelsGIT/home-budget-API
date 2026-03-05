@@ -38,7 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalExpense: number = 0;
   balance: number = 0;
   monthlyData: Record<string, number[]> = {};
-  recentTransactions: Transaction[] = [];
+  recentIncomes: Transaction[] = [];
+  recentExpenses: Transaction[] = [];
   categoryData: { name: string; total: number }[] = [];
   yearToDateComparison = {
     currentYear: { income: 0, expense: 0 },
@@ -128,6 +129,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.yearToDateComparison.currentYear.income = response.allTotal;
           this.updateBalance();
           this.updateMonthlyChart('income', transactions);
+          this.createSummaryPieChart();
         } else {
           this.yearToDateComparison.previousYear.income = response.allTotal;
         }
@@ -143,7 +145,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.yearToDateComparison.currentYear.expense = response.allTotal;
           this.updateBalance();
           this.updateMonthlyChart('expense', transactions);
-          this.updateCategoryChart(transactions);
+          this.createSummaryPieChart();
         } else {
           this.yearToDateComparison.previousYear.expense = response.allTotal;
         }
@@ -153,29 +155,49 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private loadRecentTransactions(filters: any) {
+    this.transactionService.getTransactions('income', filters).subscribe({
+      next: (response: TransactionResponse) => {
+        this.recentIncomes = response.transactionPage.content;
+      }
+    });
+
     this.transactionService.getTransactions('expense', filters).subscribe({
       next: (response: TransactionResponse) => {
-        this.recentTransactions = response.transactionPage.content;
+        this.recentExpenses = response.transactionPage.content;
       }
     });
   }
 
-  private updateCategoryChart(transactions: Transaction[]) {
-    const categoryTotals = new Map<string, number>();
+  private createSummaryPieChart(): void {
+    const ctx = document.getElementById('categoryChart') as HTMLCanvasElement;
+    if (!ctx) return;
 
-    transactions.forEach(transaction => {
-      if (transaction.category) {
-        const categoryName = transaction.category.name;
-        const currentTotal = categoryTotals.get(categoryName) || 0;
-        categoryTotals.set(categoryName, currentTotal + Number(transaction.amount));
+    if (this.categoryChartInstance) {
+      this.categoryChartInstance.destroy();
+    }
+
+    this.categoryChartInstance = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Income', 'Expenses'],
+        datasets: [{
+          data: [this.totalIncome, this.totalExpense],
+          backgroundColor: [
+            '#4CAF50', // Green for Income
+            '#f44336'  // Red for Expenses
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          }
+        }
       }
     });
-
-    this.categoryData = Array.from(categoryTotals.entries())
-      .map(([name, total]) => ({ name, total }))
-      .sort((a, b) => b.total - a.total);
-
-    this.createPieChart();
   }
 
   private createMonthlyChart(): void {
@@ -210,41 +232,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         scales: {
           y: {
             beginAtZero: true
-          }
-        }
-      }
-    });
-  }
-
-  private createPieChart(): void {
-    const ctx = document.getElementById('categoryChart') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    if (this.categoryChartInstance) {
-      this.categoryChartInstance.destroy();
-    }
-
-    this.categoryChartInstance = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: this.categoryData.map(item => item.name),
-        datasets: [{
-          data: this.categoryData.map(item => item.total),
-          backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#4BC0C0',
-            '#9966FF',
-            '#FF9F40'
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false  // This will hide the legend
           }
         }
       }
