@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../services/transaction.service';
 import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
+import { Subscription } from 'rxjs';
 
 interface CategoryTotals {
   [category: string]: {
@@ -17,7 +18,7 @@ interface CategoryTotals {
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   months = ['January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'];
   currentYear = new Date().getFullYear();
@@ -34,12 +35,24 @@ export class HomeComponent implements OnInit {
   totalExpense = 0;
   totalBalance = 0;
 
+  private refreshSubscription: Subscription | null = null;
+
   constructor(private transactionService: TransactionService) {
     this.resetTotals();
   }
 
   ngOnInit() {
     this.loadYearData();
+
+    this.refreshSubscription = this.transactionService.refreshTransactions$.subscribe(() => {
+      this.loadYearData();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
   }
 
   onYearChange(year: number | null): void {

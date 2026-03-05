@@ -109,6 +109,7 @@ export class TransactionAddFormComponent implements OnInit, OnDestroy {
     this.transactionService.addTransaction(this.type, transactionData).subscribe({
       next: () => {
         alert(`${this.type} added successfully!`);
+        this.transactionService.refreshTransactions();
         this.transactionAdded.emit();
         this.transaction = {
           user: this.transaction.user,

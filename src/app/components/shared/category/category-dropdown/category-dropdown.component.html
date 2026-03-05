@@ -13,6 +13,13 @@
       [ngValue]="category.id">
       {{ category.name }}
     </option>
+
+    <option
+      *ngIf="allowAddCategory"
+      [ngValue]="'__add__'"
+      class="add-new-option">
+      + Add New Category
+    </option>
   </select>
 </div>
 

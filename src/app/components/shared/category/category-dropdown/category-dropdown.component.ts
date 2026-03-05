@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { CategoryService } from '../../../../services/category.service';
 import { Category } from '../../../../models/category';
 import {FormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {AddCategoryModalComponent} from '../add-category-modal/add-category-modal.component';
 
 @Component({
@@ -11,12 +11,13 @@ import {AddCategoryModalComponent} from '../add-category-modal/add-category-moda
   imports: [
     FormsModule,
     NgForOf,
-    AddCategoryModalComponent
+    AddCategoryModalComponent,
+    NgIf
   ],
   templateUrl: './category-dropdown.component.html',
   styleUrls: ['./category-dropdown.component.css']
 })
-export class CategoryDropdownComponent implements OnInit {
+export class CategoryDropdownComponent implements OnInit, OnChanges {
   @Input() type: 'income' | 'expense' = 'income';
   @Input() placeholder: string = 'All Categories';
   @Input() asList: boolean = false;
@@ -38,7 +39,15 @@ export class CategoryDropdownComponent implements OnInit {
     this.categoryService.categoryRefresh$.subscribe(() => {
       this.fetchCategories();
     });
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['type'] || changes['asList']) {
+      this.fetchCategories();
+    }
+    if (changes['selectedCategory']) {
+      this.lastValidSelection = this.selectedCategory;
+    }
   }
 
   fetchCategories(): void {
@@ -54,10 +63,12 @@ export class CategoryDropdownComponent implements OnInit {
       this.lastValidSelection = this.selectedCategory;
       this.selectedCategoryChange.emit(this.selectedCategory);
     }
-
   }
 
   onAddCategory(category: Category) {
+    if (!this.categories.find(c => c.id === category.id)) {
+      this.categories.push(category);
+    }
     this.categoryService.refreshCategories();
     this.selectedCategory = category.id;
     this.lastValidSelection = category.id;

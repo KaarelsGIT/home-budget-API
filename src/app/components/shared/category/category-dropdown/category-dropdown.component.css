@@ -14,3 +14,8 @@ select:focus {
   border-color: forestgreen;
   outline: none;
 }
+
+.add-new-option {
+  font-weight: bold;
+  color: forestgreen;
+}

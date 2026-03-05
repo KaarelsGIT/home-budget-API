@@ -35,6 +35,7 @@
     <app-category-dropdown
       [type]="type"
       [asList]="true"
+      [allowAddCategory]="true"
       [selectedCategory]="filters.categoryId"
       (selectedCategoryChange)="onCategoryChange($event)">
     </app-category-dropdown>

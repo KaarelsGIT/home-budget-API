@@ -31,10 +31,15 @@ export class CategoryService {
     const upperType = type.toUpperCase();
     return this.http.get<any>(`${this.url}/all?type=${upperType}&asList=${asList}`).pipe(
       map(response => {
-        if (asList) {
-          return response as Category[];
+        // Handle both direct array and paginated/wrapped responses
+        if (Array.isArray(response)) {
+          return response;
+        } else if (response && Array.isArray(response.content)) {
+          return response.content;
+        } else if (response && response.categories && Array.isArray(response.categories)) {
+          return response.categories;
         }
-        return response.content as Category[];
+        return [];
       }),
       catchError(this.handleError)
     );

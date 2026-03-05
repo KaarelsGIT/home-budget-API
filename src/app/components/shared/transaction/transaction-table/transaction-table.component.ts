@@ -157,6 +157,7 @@ export class TransactionTableComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Transaction updated successfully:', response);
+          this.transactionService.refreshTransactions();
           this.refreshTable();
           this.closeModal();
         },
@@ -179,6 +180,7 @@ export class TransactionTableComponent implements OnInit {
         next: (response) => {
           if (response && response.success) {
             console.log(`Transaction ${id} deleted!`);
+            this.transactionService.refreshTransactions();
             this.refreshTable();
           } else {
             console.error('Unexpected response format', response);

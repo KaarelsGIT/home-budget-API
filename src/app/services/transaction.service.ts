@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,14 @@ import { map, Observable } from 'rxjs';
 export class TransactionService {
   private url = environment.apiURL;
 
+  private refreshSubject = new BehaviorSubject<boolean>(false);
+  refreshTransactions$ = this.refreshSubject.asObservable();
+
   constructor(private http: HttpClient) {}
+
+  refreshTransactions() {
+    this.refreshSubject.next(true);
+  }
 
   addTransaction(type: 'income' | 'expense', transaction: any): Observable<any> {
     return this.http.post<any>(`${this.url}/${type}s/add`, transaction);

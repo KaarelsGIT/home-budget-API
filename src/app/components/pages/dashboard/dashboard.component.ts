@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chart } from 'chart.js/auto';
 import { TransactionService } from '../../../services/transaction.service';
 import { RouterModule } from '@angular/router';
 import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
+import { Subscription } from 'rxjs';
 
 interface Transaction {
   amount: number;
@@ -31,7 +32,7 @@ interface TransactionResponse {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   selectedYear: number = new Date().getFullYear();
   totalIncome: number = 0;
   totalExpense: number = 0;
@@ -46,11 +47,22 @@ export class DashboardComponent implements OnInit {
 
   private monthlyChartInstance: Chart | null = null;
   private categoryChartInstance: Chart | null = null;
+  private refreshSubscription: Subscription | null = null;
 
   constructor(private transactionService: TransactionService) {}
 
   ngOnInit() {
     this.loadDashboardData();
+
+    this.refreshSubscription = this.transactionService.refreshTransactions$.subscribe(() => {
+      this.loadDashboardData();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
   }
 
   loadDashboardData() {
