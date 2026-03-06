@@ -105,10 +105,6 @@ export class TransactionTableComponent implements OnInit {
     params.userId = (params.userId !== null && params.userId !== 'null' && params.userId !== '') ? Number(params.userId) : null;
     params.categoryId = (params.categoryId !== null && params.categoryId !== 'null' && params.categoryId !== '') ? Number(params.categoryId) : null;
 
-    if (params.sortBy === 'date') {
-      params.sortBy = 'created';
-    }
-
     console.log(`Fetching ${this.type} transactions with params:`, params);
 
     this.transactionService.getTransactions(this.type, params).subscribe({
