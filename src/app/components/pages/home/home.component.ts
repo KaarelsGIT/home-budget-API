@@ -52,23 +52,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Subscription skip(1) väldib esimest kohe emititavat väärtust
     this.refreshSubscription = this.transactionService.refreshTransactions$.pipe(skip(1))
-      .subscribe(() => {
-        this.loadYearData();
-      });
+      .subscribe(() => this.loadYearData());
 
-    // Laadime andmed esimesel renderdamisel
     this.loadYearData();
   }
 
   ngOnDestroy() {
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
-    }
-    if (this.dataSubscription) {
-      this.dataSubscription.unsubscribe();
-    }
+    if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
   }
 
   onYearChange(year: number | null): void {
@@ -98,11 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private loadYearData() {
-    // Cancel any previous forkJoin request
-    if (this.dataSubscription) {
-      this.dataSubscription.unsubscribe();
-    }
-
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
     this.resetTotals();
 
     const filters: any = {
@@ -112,10 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       sortBy: 'date',
       sortOrder: 'desc'
     };
-
-    if (this.selectedMonth) {
-      filters.month = this.selectedMonth;
-    }
+    if (this.selectedMonth) filters.month = this.selectedMonth;
 
     this.dataSubscription = forkJoin({
       incomes: this.transactionService.getTransactions('income', filters),
@@ -123,7 +108,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }).subscribe({
       next: ({ incomes, expenses }) => {
 
-        /* ===== INCOME PROCESSING ===== */
+        // Income processing
         incomes.transactionPage.content.forEach((transaction: any) => {
           if (transaction.category?.type !== 'INCOME') return;
 
@@ -133,21 +118,17 @@ export class HomeComponent implements OnInit, OnDestroy {
           const amount = Number(transaction.amount);
 
           if (!this.incomeTotals[category]) {
-            this.incomeTotals[category] = {
-              monthlyAmounts: {},
-              total: 0
-            };
+            this.incomeTotals[category] = { monthlyAmounts: {}, total: 0 };
             this.months.forEach(m => this.incomeTotals[category].monthlyAmounts[m] = 0);
           }
 
           this.incomeTotals[category].monthlyAmounts[month] += amount;
           this.incomeTotals[category].total += amount;
-
           this.monthlyTotals.income[month] += amount;
           this.totalIncome += amount;
         });
 
-        /* ===== EXPENSE PROCESSING ===== */
+        // Expense processing
         expenses.transactionPage.content.forEach((transaction: any) => {
           if (transaction.category?.type !== 'EXPENSE') return;
 
@@ -157,16 +138,12 @@ export class HomeComponent implements OnInit, OnDestroy {
           const amount = Number(transaction.amount);
 
           if (!this.expenseTotals[category]) {
-            this.expenseTotals[category] = {
-              monthlyAmounts: {},
-              total: 0
-            };
+            this.expenseTotals[category] = { monthlyAmounts: {}, total: 0 };
             this.months.forEach(m => this.expenseTotals[category].monthlyAmounts[m] = 0);
           }
 
           this.expenseTotals[category].monthlyAmounts[month] += amount;
           this.expenseTotals[category].total += amount;
-
           this.monthlyTotals.expense[month] += amount;
           this.totalExpense += amount;
         });
@@ -185,15 +162,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getDisplayedMonths(): string[] {
-    if (this.selectedMonth) {
-      return [this.months[this.selectedMonth - 1]];
-    }
-    return this.months;
+    return this.selectedMonth ? [this.months[this.selectedMonth - 1]] : this.months;
   }
 
   getCategories(type: 'income' | 'expense'): string[] {
-    return Object.keys(type === 'income'
-      ? this.incomeTotals
-      : this.expenseTotals);
+    // Sort categories alphabetically
+    return Object.keys(type === 'income' ? this.incomeTotals : this.expenseTotals)
+      .sort((a, b) => a.localeCompare(b));
   }
+
+
 }
