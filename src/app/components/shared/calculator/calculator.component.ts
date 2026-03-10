@@ -27,8 +27,9 @@ export class CalculatorComponent {
 
     const key = event.key;
 
-    if (/^[0-9.]$/.test(key)) {
-      this.appendNumber(key);
+    if (/^[0-9.,]$/.test(key)) {
+      const normalizedKey = key === ',' ? '.' : key;
+      this.appendNumber(normalizedKey);
       return;
     }
 
