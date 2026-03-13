@@ -10,6 +10,10 @@
         [selectedMonth]="selectedMonth"
         (selectedMonthChange)="onMonthChange($event)">
       </app-month-dropdown>
+      <app-user-dropdown
+        [selectedUser]="activeUser?.id || null"
+        (selectedUserChange)="onUserChange($event)">
+      </app-user-dropdown>
     </div>
   </div>
 

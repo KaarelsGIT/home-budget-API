@@ -6,15 +6,17 @@ import {ExpensesComponent} from './components/pages/expenses/expenses.component'
 import {SettingsComponent} from './components/pages/settings/settings.component';
 import {AboutComponent} from './components/pages/about/about.component';
 import {CategoryManagerComponent} from './components/pages/category-manager/category-manager.component';
+import {AuthGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'summary', component: DashboardComponent },
-  { path: 'incomes', component: IncomesComponent },
-  { path: 'expenses', component: ExpensesComponent },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'summary', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'incomes', component: IncomesComponent, canActivate: [AuthGuard] },
+  { path: 'expenses', component: ExpensesComponent, canActivate: [AuthGuard] },
   {
     path: 'settings',
     component: SettingsComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'categories', component: CategoryManagerComponent },
       { path: '', redirectTo: 'categories', pathMatch: 'full' }

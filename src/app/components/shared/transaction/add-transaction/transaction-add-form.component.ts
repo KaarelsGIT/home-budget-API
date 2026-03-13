@@ -9,6 +9,7 @@ import {CategoryDropdownComponent} from '../../category/category-dropdown/catego
 import {CategoryService} from '../../../../services/category.service';
 import {Category} from '../../../../models/category';
 import {ActiveUserService} from '../../../../services/active-user.service';
+import {AuthService} from '../../../../services/auth.service';
 import {Subscription} from 'rxjs';
 import {evaluateMathExpression} from '../../../../utils/math-evaluator';
 
@@ -34,7 +35,8 @@ export class TransactionAddFormComponent implements OnInit, OnDestroy {
   constructor(private transactionService: TransactionService,
               private userService: UserService,
               private categoryService: CategoryService,
-              private activeUserService: ActiveUserService) {
+              private activeUserService: ActiveUserService,
+              private authService: AuthService) {
   }
 
   transaction = {
@@ -50,10 +52,16 @@ export class TransactionAddFormComponent implements OnInit, OnDestroy {
       this.transaction.user = this.activeUser;
     }
 
-    // Subscribe to globally selected user from ActiveUserService
-    this.userSubscription = this.activeUserService.getActiveUser().subscribe(user => {
-      this.transaction.user = user;
+    // Default to the currently authenticated user for new transactions
+    this.authService.getCurrentUser().subscribe(user => {
+      if (user && !this.transaction.user) {
+        this.transaction.user = user;
+      }
     });
+
+    // We can still allow manual changes via dropdown, but we don't want to
+    // automatically switch the user when the global filter (ActiveUserService) changes
+    // if we want new transactions to belong to the logged-in user by default.
   }
 
   ngOnDestroy(): void {

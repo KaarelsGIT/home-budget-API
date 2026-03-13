@@ -1,34 +1,54 @@
-import { Component } from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {UserDropdownComponent} from '../../components/shared/user/user-dropdown/user-dropdown.component';
+import { Component, OnInit } from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {User} from '../../models/user';
 import {UserService} from '../../services/user.service';
 import {CalculatorComponent} from '../../components/shared/calculator/calculator.component';
 import {ActiveUserService} from '../../services/active-user.service';
+import {AuthService} from '../../services/auth.service';
+import {LoginModalComponent} from '../../components/shared/auth/login-modal/login-modal.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-header',
   imports: [
     RouterLink,
-    UserDropdownComponent,
-    CalculatorComponent
+    CalculatorComponent,
+    LoginModalComponent,
+    NgIf
   ],
   templateUrl: 'header.component.html',
   styleUrl: 'header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   activeUser: User | null = null;
+  authenticatedUser: User | null = null;
   isCalculatorVisible = false;
+  isLoginModalVisible = false;
 
-  constructor(private userService: UserService, private activeUserService: ActiveUserService) {
+  constructor(
+    private activeUserService: ActiveUserService,
+    private authService: AuthService,
+    private router: Router
+  ) {
   }
 
-  onUserChange(userId: string | number | null): void {
-    console.log('Selected user in header:', userId);
-    this.activeUserService.setActiveUser(userId);
-    this.userService.getUserById(userId).subscribe(user => {
+  ngOnInit(): void {
+    this.authService.getCurrentUser().subscribe(user => {
+      this.authenticatedUser = user;
+    });
+
+    this.activeUserService.getActiveUser().subscribe(user => {
       this.activeUser = user;
     });
+  }
+
+  openLoginModal(): void {
+    this.isLoginModalVisible = true;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/about']);
   }
 
   toggleCalculator() {

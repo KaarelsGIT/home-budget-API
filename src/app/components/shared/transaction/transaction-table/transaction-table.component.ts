@@ -1,10 +1,12 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TransactionService} from '../../../../services/transaction.service';
 import {TransactionAddFormComponent} from '../add-transaction/transaction-add-form.component';
 import {TransactionFilterComponent} from '../filter-transaction/transaction-filter.component';
 import {TransactionUpdateFormComponent} from '../update-transaction-modal/transaction-update-form.component';
+import {ActiveUserService} from '../../../../services/active-user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-transaction-table',
@@ -19,7 +21,7 @@ import {TransactionUpdateFormComponent} from '../update-transaction-modal/transa
   ],
   styleUrls: ['./transaction-table.component.css']
 })
-export class TransactionTableComponent implements OnInit {
+export class TransactionTableComponent implements OnInit, OnDestroy {
   @Input() type!: 'income' | 'expense';
 
   isFormVisible = false;
@@ -47,8 +49,13 @@ export class TransactionTableComponent implements OnInit {
     size: 20
   };
 
+  private userSubscription: Subscription | null = null;
 
-  constructor(private transactionService: TransactionService) {
+
+  constructor(
+    private transactionService: TransactionService,
+    private activeUserService: ActiveUserService
+  ) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -61,6 +68,16 @@ export class TransactionTableComponent implements OnInit {
   ngOnInit(): void {
     // Both fetchYears and fetchTransactions will be called by ngOnChanges
     // when the initial @Input 'type' is set.
+    this.userSubscription = this.activeUserService.getActiveUser().subscribe(user => {
+      this.filters.userId = user ? user.id : null;
+      this.refreshTable();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   fetchYears(): void {
@@ -95,6 +112,14 @@ export class TransactionTableComponent implements OnInit {
   fetchTransactions(): void {
     if (!this.type) {
       console.warn('TransactionTableComponent.fetchTransactions: this.type is not defined');
+      return;
+    }
+
+    if (!this.filters.userId) {
+      this.transactions = [];
+      this.totalElements = 0;
+      this.pageTotal = 0;
+      this.allTotal = 0;
       return;
     }
 

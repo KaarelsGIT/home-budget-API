@@ -5,7 +5,10 @@ import { TransactionService } from '../../../services/transaction.service';
 import { RouterModule } from '@angular/router';
 import { YearDropdownComponent } from '../../shared/transaction/year-dropdown/year-dropdown.component';
 import { MonthDropdownComponent, MONTHS } from '../../shared/transaction/month-dropdown/month-dropdown.component';
+import { UserDropdownComponent } from '../../shared/user/user-dropdown/user-dropdown.component';
 import { Subscription } from 'rxjs';
+import { ActiveUserService } from '../../../services/active-user.service';
+import { User } from '../../../models/user';
 
 interface Transaction {
   amount: number;
@@ -29,7 +32,7 @@ interface TransactionResponse {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, YearDropdownComponent, MonthDropdownComponent], // Added YearDropdownComponent
+  imports: [CommonModule, RouterModule, YearDropdownComponent, MonthDropdownComponent, UserDropdownComponent], // Added YearDropdownComponent
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -48,15 +51,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     currentYear: { income: 0, expense: 0 },
     previousYear: { income: 0, expense: 0 }
   };
+  activeUser: User | null = null;
 
   private monthlyChartInstance: Chart | null = null;
   private categoryChartInstance: Chart | null = null;
   private refreshSubscription: Subscription | null = null;
+  private userSubscription: Subscription | null = null;
 
-  constructor(private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService,
+              private activeUserService: ActiveUserService) {}
 
   ngOnInit() {
-    this.loadDashboardData();
+    this.userSubscription = this.activeUserService.getActiveUser().subscribe((user: User | null) => {
+      this.activeUser = user;
+      this.loadDashboardData();
+    });
 
     this.refreshSubscription = this.transactionService.refreshTransactions$.subscribe(() => {
       this.loadDashboardData();
@@ -67,10 +76,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.refreshSubscription) {
       this.refreshSubscription.unsubscribe();
     }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   loadDashboardData() {
     this.monthlyData = {}; // Clear previous data
+    this.recentIncomes = [];
+    this.recentExpenses = [];
+    this.totalIncome = 0;
+    this.totalExpense = 0;
+    this.balance = 0;
+    this.categoryData = [];
+
+    if (!this.activeUser) {
+      this.monthlyData = { 'income': [], 'expense': [] };
+      this.createMonthlyChart();
+      this.createSummaryPieChart();
+      return;
+    }
+
     const recentFilters: any = {
       page: 0,
       size: 5,
@@ -80,6 +106,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.selectedMonth) {
       recentFilters.month = this.selectedMonth;
       recentFilters.year = this.selectedYear;
+    }
+    if (this.activeUser) {
+      recentFilters.userId = this.activeUser.id;
     }
 
     this.loadYearData(this.selectedYear);
@@ -97,6 +126,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onMonthChange(month: number | null): void {
     this.selectedMonth = month;
     this.loadDashboardData();
+  }
+
+  onUserChange(userId: string | number | null): void {
+    this.activeUserService.setActiveUser(userId);
   }
 
   private updateBalance(): void {
@@ -150,6 +183,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       sortOrder: 'desc',
       year: year
     };
+
+    if (this.activeUser) {
+      filters.userId = this.activeUser.id;
+    }
 
     // Always fetch full year for the monthly line chart
     this.transactionService.getTransactions('income', filters).subscribe({

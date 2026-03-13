@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BudgetSummary } from '../models/budget-summary';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +57,14 @@ export class TransactionService {
 
   updateTransaction(type: 'income' | 'expense', id: number, transaction: any) {
     return this.http.put<any>(`${this.url}/${type}s/update/${id}`, transaction);
+  }
+
+  getSummary(filters: any): Observable<BudgetSummary> {
+    let params = new HttpParams();
+    if (filters.userId !== null && filters.userId !== undefined) params = params.set('userId', filters.userId);
+    if (filters.year !== null && filters.year !== undefined) params = params.set('year', filters.year);
+    if (filters.month !== null && filters.month !== undefined) params = params.set('month', filters.month);
+
+    return this.http.get<BudgetSummary>(`${this.url}/summary`, { params });
   }
 }

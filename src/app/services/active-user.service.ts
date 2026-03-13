@@ -19,9 +19,13 @@ export class ActiveUserService {
     if (userId === null) {
       this.activeUserSubject.next(null);
     } else {
-      this.userService.getUserById(userId).subscribe(user => {
+      this.getUserById(userId).subscribe(user => {
         this.activeUserSubject.next(user);
       });
     }
+  }
+
+  getUserById(id: string | number | null): Observable<User> {
+    return this.userService.getUserById(id);
   }
 }
